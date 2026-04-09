@@ -292,6 +292,80 @@
       padding: 4px 2px;
     }
 
+    .multi-select {
+      position: relative;
+    }
+
+    .multi-select-btn {
+      width: 100%;
+      height: 40px;
+      border: 1px solid #dce1eb;
+      border-radius: 6px;
+      background: #fff;
+      color: #2d3750;
+      font-size: 14px;
+      text-align: left;
+      padding: 0 34px 0 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      position: relative;
+    }
+
+    .multi-select-btn::after {
+      content: '▾';
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #75819d;
+      font-size: 12px;
+    }
+
+    .multi-select.open .multi-select-btn::after {
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    .multi-select-panel {
+      display: none;
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      width: 100%;
+      background: #fff;
+      border: 1px solid #dce1eb;
+      border-radius: 6px;
+      box-shadow: 0 6px 18px rgba(31, 42, 68, 0.12);
+      z-index: 30;
+      max-height: 220px;
+      overflow: auto;
+      padding: 6px 0;
+    }
+
+    .multi-select.open .multi-select-panel {
+      display: block;
+    }
+
+    .multi-select-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      font-size: 14px;
+      color: #2d3750;
+      cursor: pointer;
+    }
+
+    .multi-select-option:hover {
+      background: #f5f8ff;
+    }
+
+    .multi-select-option input {
+      margin: 0;
+      cursor: pointer;
+    }
+
     .actions {
       display: flex;
       align-items: end;
@@ -632,7 +706,7 @@
         <div class="field filter-non-city"><label>是否外籍</label><select id="foreignSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
         <div class="field filter-non-city"><label>线上/线下</label><select id="channelSelect" class="select"><option>全部</option><option>线上</option><option>线下</option></select></div>
         <div class="field filter-non-city"><label>是否国潮品牌</label><select id="guochaoSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
-        <div class="field"><label>门店</label><select id="storeSelect" class="select" multiple size="4"><option value="全部" selected>全部</option><option value="[6826]广州新免免税品有限公司">[6826]广州新免免税品有限公司</option><option value="[6852]中免集团昆明机场免税品有限公司">[6852]中免集团昆明机场免税品有限公司</option><option value="[6853]上海港中免免税品有限公司">[6853]上海港中免免税品有限公司</option><option value="[6764]湖南中免免税品有限责任公司">[6764]湖南中免免税品有限责任公司</option><option value="[6791]厦门东免免税品有限公司">[6791]厦门东免免税品有限公司</option></select></div>
+        <div class="field"><label>门店</label><div id="storeSelectWrap" class="multi-select"><button id="storeSelectBtn" type="button" class="multi-select-btn" aria-expanded="false">全部</button><div id="storeSelectPanel" class="multi-select-panel"></div></div><select id="storeSelect" class="select" multiple size="4" hidden><option value="全部" selected>全部</option><option value="[6826]广州新免免税品有限公司">[6826]广州新免免税品有限公司</option><option value="[6852]中免集团昆明机场免税品有限公司">[6852]中免集团昆明机场免税品有限公司</option><option value="[6853]上海港中免免税品有限公司">[6853]上海港中免免税品有限公司</option><option value="[6764]湖南中免免税品有限责任公司">[6764]湖南中免免税品有限责任公司</option><option value="[6791]厦门东免免税品有限公司">[6791]厦门东免免税品有限公司</option></select></div>
         <div class="actions"><button id="queryBtn" class="btn-primary">查询</button></div>
       </div>
     </section>
@@ -779,6 +853,10 @@
                 <tr><td>6</td><td>2025-01</td><td>法国</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>箱包</td><td>LV</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>41-45</td><td>39.82</td></tr>
                 <tr><td>7</td><td>2025-01</td><td>新加坡</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>腕表</td><td>欧米茄</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>46-50</td><td>25.08</td></tr>
                 <tr><td>8</td><td>2025-01</td><td>阿联酋</td><td>[6853]上海港中免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>珠宝</td><td>卡地亚</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>女</td><td>50以上</td><td>52.44</td></tr>
+                <tr><td>9</td><td>2025-02</td><td>中国大陆</td><td>[6853]上海港中免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>美妆</td><td>雅诗兰黛</td><td><span class="tag tag-yes">是</span></td><td>免税</td><td>女</td><td>24-28</td><td>41.76</td></tr>
+                <tr><td>10</td><td>2025-02</td><td>日本</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>箱包</td><td>COACH</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>男</td><td>29-33</td><td>22.35</td></tr>
+                <tr><td>11</td><td>2025-03</td><td>韩国</td><td>[6764]湖南中免免税品有限责任公司</td><td><span class="tag tag-online">线下</span></td><td>腕表</td><td>天梭</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>34-40</td><td>18.92</td></tr>
+                <tr><td>12</td><td>2025-03</td><td>新加坡</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>食品</td><td>歌帝梵</td><td><span class="tag tag-yes">是</span></td><td>其它</td><td>女</td><td>41-45</td><td>12.68</td></tr>
               </tbody>
             </table>
           </div>
@@ -1018,6 +1096,9 @@
     const channelSelect = document.getElementById('channelSelect');
     const guochaoSelect = document.getElementById('guochaoSelect');
     const storeSelect = document.getElementById('storeSelect');
+    const storeSelectWrap = document.getElementById('storeSelectWrap');
+    const storeSelectBtn = document.getElementById('storeSelectBtn');
+    const storeSelectPanel = document.getElementById('storeSelectPanel');
     const queryBtn = document.getElementById('queryBtn');
     const startTimeInput = document.getElementById('startTimeInput');
     const endTimeInput = document.getElementById('endTimeInput');
@@ -1145,6 +1226,85 @@
       ['256.78','46.00','210.78','42.56','9.23','51.79','308.57','48.92','9.86','39.06','13.42','62.34','20.2%','116.84','7386','1620','5766','1644','280','1091','10401','1785','966','241','725','398','71','2401','966']
     ];
 
+    function setStoreDropdownOpen(open) {
+      if (!storeSelectWrap || !storeSelectBtn) return;
+      storeSelectWrap.classList.toggle('open', open);
+      storeSelectBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function updateStoreButtonText() {
+      if (!storeSelectBtn || !storeSelect) return;
+      const selected = Array.from(storeSelect.options).filter(opt => opt.selected);
+      if (!selected.length || selected.some(opt => opt.value === '全部')) {
+        storeSelectBtn.textContent = '全部';
+        return;
+      }
+      const labels = selected.map(opt => opt.textContent.trim());
+      storeSelectBtn.textContent = labels.length <= 2 ? labels.join('、') : `已选${labels.length}项`;
+    }
+
+    function renderStorePanelOptions() {
+      if (!storeSelectPanel || !storeSelect) return;
+      storeSelectPanel.innerHTML = '';
+      Array.from(storeSelect.options).forEach(opt => {
+        const label = document.createElement('label');
+        label.className = 'multi-select-option';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = opt.value;
+        checkbox.checked = opt.selected;
+
+        const text = document.createElement('span');
+        text.textContent = opt.textContent;
+
+        label.appendChild(checkbox);
+        label.appendChild(text);
+        storeSelectPanel.appendChild(label);
+      });
+    }
+
+    function applyStorePanelSelection() {
+      if (!storeSelectPanel || !storeSelect) return;
+      const checkedValues = Array.from(storeSelectPanel.querySelectorAll('input[type="checkbox"]'))
+        .filter(input => input.checked)
+        .map(input => input.value);
+      Array.from(storeSelect.options).forEach(opt => {
+        opt.selected = checkedValues.includes(opt.value);
+      });
+      normalizeStoreSelection();
+      renderStorePanelOptions();
+      updateStoreButtonText();
+      storeSelect.dispatchEvent(new Event('change'));
+    }
+
+    function initStoreMultiSelect() {
+      if (!storeSelectWrap || !storeSelectBtn || !storeSelectPanel || !storeSelect) return;
+      renderStorePanelOptions();
+      updateStoreButtonText();
+
+      storeSelectBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        setStoreDropdownOpen(!storeSelectWrap.classList.contains('open'));
+      });
+
+      storeSelectPanel.addEventListener('click', e => {
+        e.stopPropagation();
+      });
+
+      storeSelectPanel.addEventListener('change', e => {
+        if (e.target && e.target.matches('input[type="checkbox"]')) {
+          applyStorePanelSelection();
+        }
+      });
+
+      document.addEventListener('click', e => {
+        if (!storeSelectWrap.contains(e.target)) {
+          setStoreDropdownOpen(false);
+        }
+      });
+    }
+
     function getSelectedStoreValues() {
       if (!storeSelect) return [];
       return Array.from(storeSelect.selectedOptions).map(opt => opt.value);
@@ -1192,6 +1352,9 @@
         opt.selected = selected.includes(opt.value);
       });
       normalizeStoreSelection();
+      renderStorePanelOptions();
+      updateStoreButtonText();
+      setStoreDropdownOpen(false);
     }
 
     function renderCityTables(selectedStores = []) {
@@ -1221,6 +1384,8 @@
     if (storeSelect) {
       storeSelect.addEventListener('change', () => {
         normalizeStoreSelection();
+        renderStorePanelOptions();
+        updateStoreButtonText();
         applyCurrentTabFilters();
       });
     }
@@ -1561,6 +1726,7 @@
 
     setNationOptions([...chineseNations, ...foreignNations]);
     setStoreOptionsByTab('portrait');
+    initStoreMultiSelect();
     setDateInputsByTab('portrait');
     setCityView('weekly');
     applyColumnVisibility();
