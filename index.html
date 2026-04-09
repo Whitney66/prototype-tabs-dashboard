@@ -1,0 +1,1438 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>报表高保真原型</title>
+  <style>
+    :root {
+      --bg: #f4f6fb;
+      --card: #ffffff;
+      --line: #e5eaf3;
+      --text: #1f2a44;
+      --sub: #677189;
+      --blue: #2f66f5;
+      --green-soft: #e8f8ef;
+      --orange-soft: #fff4e9;
+      --purple-soft: #f3efff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      font-family: "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+      color: var(--text);
+    }
+
+    .bi-header {
+      background: linear-gradient(0deg, #2d61ea, #2c6bf1);
+      color: #fff;
+      border-bottom: 1px solid #2451c7;
+      box-shadow: 0 1px 2px rgba(12, 39, 110, 0.28);
+    }
+
+    .bi-header-main {
+      height: 64px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .bi-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 180px;
+      font-size: 38px;
+      font-weight: 700;
+    }
+
+    .bi-logo-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: conic-gradient(#ffd43b, #3bc9db, #4dabf7, #5c7cfa, #845ef7, #ffd43b);
+      border: 2px solid rgba(255,255,255,.45);
+    }
+
+    .bi-nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .bi-nav-item {
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 30px;
+      font-weight: 500;
+      color: rgba(255,255,255,.9);
+      white-space: nowrap;
+    }
+
+    .bi-nav-item.active {
+      background: rgba(255,255,255,.2);
+      color: #fff;
+      font-weight: 700;
+    }
+
+    .bi-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .bi-search {
+      width: 300px;
+      height: 38px;
+      border-radius: 20px;
+      border: 0;
+      outline: 0;
+      padding: 0 14px;
+      background: rgba(255,255,255,.9);
+      font-size: 15px;
+    }
+
+    .bi-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.18);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .bi-subtabs {
+      background: #f7f9fe;
+      border-top: 1px solid rgba(255,255,255,.25);
+      border-bottom: 1px solid #d8deeb;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .crumb {
+      border: 1px solid #d2d9e9;
+      background: #fff;
+      color: #4f5f80;
+      border-radius: 4px;
+      padding: 6px 12px;
+      font-size: 14px;
+    }
+
+    .crumb.active {
+      background: #2f84f3;
+      border-color: #2f84f3;
+      color: #fff;
+    }
+
+    .page {
+      max-width: 1600px;
+      margin: 16px auto 24px;
+      padding: 0 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      box-shadow: 0 1px 3px rgba(31, 42, 68, 0.05);
+    }
+
+    .header {
+      padding: 18px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 16px;
+    }
+
+    .title {
+      margin: 0 0 8px;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--sub);
+      font-size: 18px;
+    }
+
+    .btn-outline {
+      border: 1px solid #6f7a90;
+      background: #6f7a90;
+      color: #fff;
+      border-radius: 8px;
+      padding: 10px 18px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(17, 25, 40, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-overlay.open {
+      display: flex;
+    }
+
+    .modal {
+      width: min(980px, 96vw);
+      max-height: 88vh;
+      overflow: auto;
+      background: #fff;
+      border-radius: 12px;
+      border: 1px solid #dbe3f2;
+      box-shadow: 0 10px 36px rgba(18, 35, 84, 0.25);
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid #e7edf8;
+      position: sticky;
+      top: 0;
+      background: #fff;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 22px;
+      font-weight: 700;
+      color: #1f2a44;
+    }
+
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      border: 1px solid #d3daea;
+      border-radius: 6px;
+      background: #fff;
+      color: #5f6c88;
+      font-size: 18px;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-body {
+      padding: 16px 20px 20px;
+      color: #2a3653;
+      font-size: 15px;
+      line-height: 1.85;
+    }
+
+    .modal-body h4 {
+      margin: 10px 0 6px;
+      font-size: 17px;
+      color: #1f2a44;
+    }
+
+    .filter {
+      padding: 16px 20px 20px;
+      margin-bottom: 16px;
+    }
+
+    .filter h3 {
+      margin: 0 0 12px;
+      font-size: 30px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .field label {
+      color: #4e5b75;
+      font-size: 16px;
+    }
+
+    .input,
+    .select {
+      border: 1px solid #dce1eb;
+      border-radius: 6px;
+      background: #fff;
+      padding: 10px 12px;
+      font-size: 16px;
+      color: #2d3750;
+      height: 44px;
+      width: 100%;
+    }
+
+    .actions {
+      display: flex;
+      align-items: end;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: var(--blue);
+      border: 1px solid var(--blue);
+      color: #fff;
+      border-radius: 6px;
+      height: 44px;
+      min-width: 110px;
+      font-size: 20px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tab-wrap {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .tabs {
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding: 0 12px;
+      background: #fff;
+    }
+
+    .tab {
+      border: none;
+      background: transparent;
+      padding: 16px 20px;
+      font-size: 28px;
+      font-weight: 600;
+      color: #46506a;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab.active {
+      color: var(--blue);
+      border-bottom-color: var(--blue);
+    }
+
+    .export {
+      margin-left: auto;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .panel {
+      padding: 14px 14px 20px;
+      display: none;
+      background: #fff;
+    }
+
+    .panel.active { display: block; }
+
+    .section {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      margin-top: 12px;
+      overflow: hidden;
+      background: #fff;
+    }
+
+    .section-header {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 34px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .switches {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .toggle-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #49546f;
+      font-size: 16px;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      border: 1px solid #d5dbea;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .toggle-btn {
+      border: 0;
+      padding: 4px 10px;
+      min-width: 36px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #6e7890;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .toggle-btn.active {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .table-wrap {
+      width: 100%;
+      overflow: auto;
+      background: #fff;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      min-width: 1800px;
+    }
+
+    .entry-summary-table {
+      min-width: 3400px;
+    }
+
+    th,
+    td {
+      border: 1px solid #e4e8f1;
+      padding: 10px 12px;
+      font-size: 22px;
+      text-align: center;
+      white-space: nowrap;
+      line-height: 1.4;
+    }
+
+    th {
+      font-weight: 700;
+      color: #24314f;
+      background: #f4f7fc;
+    }
+
+    .th-group-blue { background: #e9f1ff; }
+    .th-group-yellow { background: #fff6df; }
+    .th-group-purple { background: #f3ecff; }
+    .th-group-green { background: #eaf8ee; }
+    .th-group-orange { background: #fff2e7; }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .tag-online {
+      color: #14925f;
+      background: var(--green-soft);
+    }
+
+    .tag-yes {
+      color: #c56b19;
+      background: var(--orange-soft);
+    }
+
+    .tag-no {
+      color: #6b7691;
+      background: #edf0f6;
+    }
+
+    .sub-filter {
+      display: flex;
+      justify-content: end;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .sub-filter .select { width: 210px; }
+
+    .chip-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-bottom: 1px solid #e8ebf2;
+      font-size: 14px;
+      color: #5a637e;
+    }
+
+    .chip {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: #ffe9ea;
+      color: #ea2e3b;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .entry-type-filter {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #49546f;
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .entry-type-filter .select {
+      width: 150px;
+      height: 38px;
+      padding: 6px 10px;
+      font-size: 15px;
+    }
+
+    .entry-type-tip {
+      padding: 10px 12px;
+      border-bottom: 1px solid #e8ebf2;
+      color: #d92727;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .city-report-switch {
+      display: inline-flex;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #dce2ee;
+    }
+
+    .city-report-switch button {
+      border: 0;
+      padding: 9px 18px;
+      background: #fff;
+      color: #5b6681;
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .city-report-switch button.active {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .city-view {
+      display: none;
+    }
+
+    .city-view.active {
+      display: block;
+    }
+
+    .city-weekly-table,
+    .city-monthly-table {
+      min-width: 3600px;
+    }
+
+    .hidden-col { display: none; }
+
+    @media (max-width: 1200px) {
+      .filter-grid { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
+      .tab { font-size: 22px; }
+      th, td { font-size: 16px; }
+      .section-title { font-size: 28px; }
+      .bi-nav-item { font-size: 18px; }
+      .bi-logo { font-size: 24px; }
+      .bi-search { width: 170px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="bi-header">
+    <div class="bi-header-main">
+      <div class="bi-logo"><span class="bi-logo-mark"></span><span>大数据平台</span></div>
+      <nav class="bi-nav">
+        <span class="bi-nav-item">库存分析</span>
+        <span class="bi-nav-item">顾客分析</span>
+        <span class="bi-nav-item">采购分析</span>
+        <span class="bi-nav-item">提货分析</span>
+        <span class="bi-nav-item">风险管控</span>
+        <span class="bi-nav-item">离线分析</span>
+        <span class="bi-nav-item">自定义分析</span>
+        <span class="bi-nav-item active">数据填报</span>
+      </nav>
+      <div class="bi-right">
+        <input class="bi-search" placeholder="搜索" />
+        <span class="bi-icon">工</span>
+        <span class="bi-icon">铃</span>
+        <span class="bi-icon">全</span>
+      </div>
+    </div>
+    <div class="bi-subtabs">
+      <span class="crumb">经营看板</span>
+      <span class="crumb">中免国际营收毛利目标跟踪表</span>
+      <span class="crumb active">不同国籍顾客购买与画像总表</span>
+    </div>
+  </header>
+
+  <div class="page">
+    <section class="card header">
+      <div>
+        <p class="subtitle">数据更新时间: 2026年2月1日 09:36:26</p>
+      </div>
+      <button id="requirementBtn" class="btn-outline">需求描述</button>
+    </section>
+
+    <section class="card filter">
+      <h3>筛选条件</h3>
+      <div class="filter-grid">
+        <div class="field"><label>开始时间</label><input id="startTimeInput" class="input" value="2025年01月01日" placeholder="支持输入：XXXX年XX月XX日" /></div>
+        <div class="field"><label>结束时间</label><input id="endTimeInput" class="input" value="2026年12月31日" placeholder="支持输入：XXXX年XX月XX日" /></div>
+        <div class="field filter-non-city"><label>国籍</label><select id="nationSelect" class="select"></select></div>
+        <div class="field filter-non-city"><label>是否外籍</label><select id="foreignSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
+        <div class="field"><label>门店</label><select id="storeSelect" class="select"><option>全部</option><option>[6826]广州新免免税品有限公司</option><option>[6852]中免集团昆明机场免税品有限公司</option><option>[6853]上海港中免免税品有限公司</option><option>[6764]湖南中免免税品有限责任公司</option><option>[6791]厦门东免免税品有限公司</option></select></div>
+        <div class="field filter-non-city"><label>线上/线下</label><select class="select"><option>全部</option></select></div>
+        <div class="field filter-non-city"><label>是否国潮产品</label><select class="select"><option>全部</option></select></div>
+        <div class="actions"><button id="queryBtn" class="btn-primary">查询</button></div>
+      </div>
+    </section>
+
+    <section class="tab-wrap">
+      <div class="tabs">
+        <button class="tab active" data-tab="portrait">顾客画像</button>
+        <button class="tab" data-tab="entry">进出境口岸</button>
+        <button class="tab" data-tab="city">市内店</button>
+        <button class="export">导出数据</button>
+      </div>
+
+      <div class="panel active" id="portrait">
+        <div class="section" id="fig1">
+          <div class="section-header">
+            <h2 class="section-title">汇总表</h2>
+            <div class="switches">
+              <span class="toggle-control" data-target-col="channel">
+                是否展示线上/线下：
+                <span class="toggle-group">
+                  <button class="toggle-btn active" data-value="yes">是</button>
+                  <button class="toggle-btn" data-value="no">否</button>
+                </span>
+              </span>
+              <span class="toggle-control" data-target-col="nation">
+                是否展示国籍：
+                <span class="toggle-group">
+                  <button class="toggle-btn active" data-value="yes">是</button>
+                  <button class="toggle-btn" data-value="no">否</button>
+                </span>
+              </span>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th rowspan="2">门店</th>
+                  <th rowspan="2" class="col-channel">线上/线下</th>
+                  <th rowspan="2" class="col-nation">国籍</th>
+                  <th colspan="5" class="th-group-yellow">门店总体销售情况年累计</th>
+                  <th colspan="5" class="th-group-purple">门店总体销售情况月累计</th>
+                  <th colspan="5" class="th-group-blue">外籍人员消费情况年累计</th>
+                </tr>
+                <tr>
+                  <th class="th-group-yellow">线下有税（不含离境退税）</th>
+                  <th class="th-group-yellow">离境退税</th>
+                  <th class="th-group-yellow">国潮销售额（万元）</th>
+                  <th class="th-group-yellow">购物人数</th>
+                  <th class="th-group-yellow">国潮购物人数</th>
+
+                  <th class="th-group-purple">线下有税（不含离境退税）</th>
+                  <th class="th-group-purple">离境退税</th>
+                  <th class="th-group-purple">国潮销售额（万元）</th>
+                  <th class="th-group-purple">购物人数</th>
+                  <th class="th-group-purple">国潮购物人数</th>
+
+                  <th class="th-group-blue">线下有税（不含离境退税）</th>
+                  <th class="th-group-blue">离境退税</th>
+                  <th class="th-group-blue">国潮销售额（万元）</th>
+                  <th class="th-group-blue">购物人数</th>
+                  <th class="th-group-blue">国潮购物人数</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>[6826]广州新免免税品有限公司</td>
+                  <td class="col-channel"><span class="tag tag-online">线下</span></td>
+                  <td class="col-nation">中国大陆</td>
+                  <td>282.40</td><td>28.10</td><td>180.20</td><td>8450</td><td>3920</td>
+                  <td>24.60</td><td>2.20</td><td>15.60</td><td>2010</td><td>910</td>
+                  <td>0.00</td><td>0.00</td><td>0.00</td><td>0</td><td>0</td>
+                </tr>
+                <tr>
+                  <td>[6826]广州新免免税品有限公司</td>
+                  <td class="col-channel"><span class="tag tag-online">线上</span></td>
+                  <td class="col-nation">香港</td>
+                  <td>388.30</td><td>29.47</td><td>220.31</td><td>9276</td><td>4670</td>
+                  <td>31.12</td><td>3.28</td><td>16.99</td><td>2527</td><td>1291</td>
+                  <td>39.40</td><td>6.84</td><td>46.24</td><td>883</td><td>883</td>
+                </tr>
+                <tr>
+                  <td>[6852]中免集团昆明机场免税品有限公司</td>
+                  <td class="col-channel"><span class="tag tag-online">线下</span></td>
+                  <td class="col-nation">澳门</td>
+                  <td>330.83</td><td>36.76</td><td>245.92</td><td>9875</td><td>6549</td>
+                  <td>38.12</td><td>4.74</td><td>42.86</td><td>1573</td><td>1573</td>
+                  <td>42.50</td><td>1.88</td><td>13.28</td><td>920</td><td>920</td>
+                </tr>
+                <tr>
+                  <td>[6853]上海港中免免税品有限公司</td>
+                  <td class="col-channel"><span class="tag tag-online">线上</span></td>
+                  <td class="col-nation">台湾</td>
+                  <td>302.20</td><td>24.15</td><td>326.35</td><td>10731</td><td>10731</td>
+                  <td>32.44</td><td>3.20</td><td>35.64</td><td>1623</td><td>1623</td>
+                  <td>36.01</td><td>4.01</td><td>40.02</td><td>966</td><td>966</td>
+                </tr>
+                <tr>
+                  <td>[6764]湖南中免免税品有限责任公司</td>
+                  <td class="col-channel"><span class="tag tag-online">线下</span></td>
+                  <td class="col-nation">美国</td>
+                  <td>286.94</td><td>31.89</td><td>268.69</td><td>12323</td><td>8918</td>
+                  <td>40.88</td><td>3.07</td><td>43.95</td><td>1644</td><td>1644</td>
+                  <td>28.71</td><td>5.06</td><td>33.77</td><td>812</td><td>812</td>
+                </tr>
+                <tr>
+                  <td>[6791]厦门东免免税品有限公司</td>
+                  <td class="col-channel"><span class="tag tag-online">线下</span></td>
+                  <td class="col-nation">日本</td>
+                  <td>273.40</td><td>29.63</td><td>64.52</td><td>8406</td><td>1885</td>
+                  <td>37.11</td><td>3.12</td><td>20.86</td><td>1248</td><td>784</td>
+                  <td>31.77</td><td>11.54</td><td>0.00</td><td>691</td><td>0</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section" id="fig2">
+          <div class="section-header">
+            <h2 class="section-title">明细表</h2>
+            <div class="sub-filter">
+              <span>业务类型:</span>
+              <select class="select"><option>全部</option></select>
+              <span>品类:</span>
+              <select class="select"><option>全部</option></select>
+              <span>品牌:</span>
+              <select class="select"><option>全部</option></select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>序号</th><th>年月</th><th>国籍</th><th>门店</th><th>线上/线下</th><th>品类</th><th>品牌</th><th>是否国潮产品</th><th>业务类型</th><th>性别</th><th>年龄段</th><th>销售额(万元)</th>
+                </tr>
+              </thead>
+              <tbody id="portraitDetailBody">
+                <tr><td>1</td><td>2025-01</td><td>中国大陆</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>进口烟</td><td>万宝路</td><td><span class="tag tag-yes">是</span></td><td>有税</td><td>男</td><td>16—19</td><td>18.24</td></tr>
+                <tr><td>2</td><td>2025-01</td><td>香港</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>进口酒</td><td>轩尼诗</td><td><span class="tag tag-yes">是</span></td><td>免税</td><td>男</td><td>20-23</td><td>36.62</td></tr>
+                <tr><td>3</td><td>2025-01</td><td>澳门</td><td>[6852]中免集团昆明机场免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>进口酒</td><td>轩尼诗</td><td><span class="tag tag-no">否</span></td><td>免税</td><td>女</td><td>24-28</td><td>44.38</td></tr>
+                <tr><td>4</td><td>2025-01</td><td>台湾</td><td>[6852]中免集团昆明机场免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>国产烟</td><td>中华</td><td><span class="tag tag-yes">是</span></td><td>其它</td><td>女</td><td>29-33</td><td>13.28</td></tr>
+                <tr><td>5</td><td>2025-01</td><td>美国</td><td>[6764]湖南中免免税品有限责任公司</td><td><span class="tag tag-online">线下</span></td><td>香化</td><td>兰蔻</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>女</td><td>34-40</td><td>27.16</td></tr>
+                <tr><td>6</td><td>2025-01</td><td>法国</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>箱包</td><td>LV</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>41-45</td><td>39.82</td></tr>
+                <tr><td>7</td><td>2025-01</td><td>新加坡</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>腕表</td><td>欧米茄</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>46-50</td><td>25.08</td></tr>
+                <tr><td>8</td><td>2025-01</td><td>阿联酋</td><td>[6853]上海港中免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>珠宝</td><td>卡地亚</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>女</td><td>50以上</td><td>52.44</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="entry">
+        <div class="section" id="fig3">
+          <div class="section-header">
+            <h2 class="section-title">汇总表</h2>
+            <div class="entry-type-filter">
+              <span>类型</span>
+              <select id="entryTypeSelect" class="select">
+                <option value="all">全部</option>
+                <option value="outbound">出境</option>
+                <option value="inbound">进境</option>
+                <option value="other">其他</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="entry-summary-table">
+              <thead>
+                <tr>
+                  <th>国籍</th>
+                  <th>[6826]广州新免免税品有限公司</th>
+                  <th>[6852]中免集团昆明机场免税品有限公司</th>
+                  <th>[6853]上海港中免免税品有限公司</th>
+                  <th>[6764]湖南中免免税品有限责任公司</th>
+                  <th>[6791]厦门东免免税品有限公司</th>
+                  <th>[6795]海南海航中免免税品有限公司</th>
+                  <th>[6850]青岛新免免税品有限责任公司</th>
+                  <th>[6851]中免集团沈阳免税品商贸有限责任公司</th>
+                  <th>[6912]中免集团（武汉）机场免税品有限公司</th>
+                  <th>[6918]中免集团南京机场进境免税品有限公司</th>
+                  <th>[6702]黑河市中免免税店有限责任公司</th>
+                  <th>[6118]西安咸阳国际机场免税品有限公司</th>
+                  <th>[6810]乌鲁木齐市中免免税品有限责任公司</th>
+                  <th>[6743]满洲里中免免税品有限责任公司</th>
+                  <th>汇总</th>
+                </tr>
+              </thead>
+              <tbody id="entrySummaryBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-header">
+            <h2 class="section-title">明细表</h2>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>序号</th><th>年月</th><th>国籍</th><th>门店</th><th>线上/线下</th><th>销售额(万元)</th><th>国潮销售额(万元)</th><th>购物人数</th><th>国潮购物人数</th></tr>
+              </thead>
+              <tbody id="entryDetailBody">
+                <tr><td>1</td><td>2025-01</td><td>香港</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>46.24</td><td>46.24</td><td>883</td><td>883</td></tr>
+                <tr><td>2</td><td>2025-01</td><td>香港</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>36.62</td><td>36.62</td><td>355</td><td>355</td></tr>
+                <tr><td>3</td><td>2025-01</td><td>澳门</td><td>[6852]中免集团昆明机场免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>44.38</td><td>0.00</td><td>723</td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel" id="city">
+        <div class="section" id="fig4" style="margin-top: 0;">
+          <div class="section-header">
+            <h2 id="cityTitle" class="section-title">市内店销售额统计（本周3.12-3.18）（金额：万元）</h2>
+            <div class="city-report-switch">
+              <button class="active" data-city-view="weekly">周报</button>
+              <button data-city-view="monthly">月报</button>
+            </div>
+          </div>
+
+          <div class="city-view active" data-city-view-panel="weekly">
+            <div class="table-wrap">
+              <table class="city-weekly-table">
+                <thead>
+                  <tr>
+                    <th rowspan="3">门店名称</th>
+                    <th rowspan="3">销售额合计</th>
+                    <th colspan="3">免税销售额（含券、含积分）</th>
+                    <th colspan="5" class="th-group-orange">外国人销售额</th>
+                    <th colspan="11" class="th-group-green">有税销售额（含券、含积分）</th>
+                    <th rowspan="3">有税销售额合计（万元）</th>
+                  </tr>
+                  <tr>
+                    <th rowspan="2">线下免税销售额</th>
+                    <th rowspan="2">线上免税预订平台销售额</th>
+                    <th rowspan="2">免税合计</th>
+                    <th rowspan="2">外国人消费额合计</th>
+                    <th rowspan="2">外国人免税销售额</th>
+                    <th rowspan="2">外国人离境退税销售额</th>
+                    <th rowspan="2">外国人线下有税销售额</th>
+                    <th rowspan="2">外国人免税及离境退税消费占比（%）</th>
+                    <th colspan="4">线下有税销售额（有税经销、代销、联营）</th>
+                    <th colspan="7">线上有税销售额</th>
+                  </tr>
+                  <tr>
+                    <th>线下有税销售额（不含离境退税）</th>
+                    <th>离境退税销售额</th>
+                    <th>离境退税销售单数（笔）</th>
+                    <th>线下有税小计</th>
+                    <th>前海会员购销售额GMV（不计入营收统计）</th>
+                    <th>前海会员购返佣</th>
+                    <th>海南直签购销售额GMV（不计入营收统计）</th>
+                    <th>海南直签购返佣</th>
+                    <th>直播带货销售额GMV（不计入营收统计）</th>
+                    <th>直播带货返佣</th>
+                    <th>云仓、云店、有税线上小计</th>
+                  </tr>
+                </thead>
+                <tbody id="cityWeeklyBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="city-view" data-city-view-panel="monthly">
+            <div class="table-wrap">
+              <table class="city-monthly-table">
+                <thead>
+                  <tr>
+                    <th rowspan="2">门店</th>
+                    <th colspan="6">2026年2月销售额</th>
+                    <th colspan="5">外国人消费金额</th>
+                    <th colspan="8">2026年2月购物人次</th>
+                    <th colspan="8">外国人购物人次</th>
+                  </tr>
+                  <tr>
+                    <th>免税销售额</th>
+                    <th>线上免税预订平台销售额</th>
+                    <th>线下免税销售额</th>
+                    <th>线下有税（不含离境退税）</th>
+                    <th>离境退税</th>
+                    <th>5.有税合计</th>
+                    <th>总计</th>
+                    <th>免税销售额</th>
+                    <th>线上免税预订平台销售额</th>
+                    <th>线下免税销售额</th>
+                    <th>2.线下有税/3.离境退税</th>
+                    <th>合计</th>
+                    <th>外国人消费占比</th>
+                    <th>国潮销售额</th>
+                    <th>免税购物人数</th>
+                    <th>线上免税预订平台销售额</th>
+                    <th>线下免税销售额</th>
+                    <th>线下有税（不含离境退税）</th>
+                    <th>离境退税</th>
+                    <th>线上有税</th>
+                    <th>合计</th>
+                    <th>外国人购物人数</th>
+                    <th>免税购物人数</th>
+                    <th>线上免税预订平台销售额</th>
+                    <th>线下免税销售额</th>
+                    <th>线下有税（不含离境退税）</th>
+                    <th>离境退税</th>
+                    <th>合计</th>
+                    <th>国潮购物人次</th>
+                  </tr>
+                </thead>
+                <tbody id="cityMonthlyBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="requirementModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="requirementModalTitle">
+    <div class="modal">
+      <div class="modal-header">
+        <h3 id="requirementModalTitle" class="modal-title">需求背景描述</h3>
+        <button id="requirementCloseBtn" class="modal-close" type="button" aria-label="关闭">×</button>
+      </div>
+      <div class="modal-body">
+        <h4>一、使用部门：</h4>
+        <div>战投以及零售运营部</div>
+
+        <h4>二、需求背景：</h4>
+        <div>基于原始需求，需将【不同国籍顾客画像优化】与【不同国籍购买情况】合并为【不同国籍顾客购买与画像总表】。当前两张表分导致无法直接关联画像与购买数据，影响分析效率；且每月需手动跨表提取数据，重复操作耗时。合并后可实现数据即时关联，将手动提数变为自动查询导出，提升效率并统一数据口径，更贴合业务使用场景。</div>
+
+        <h4>三、开发实现方式：</h4>
+        <div>永洪BI</div>
+
+        <h4>四、需求逻辑描述</h4>
+        <div>原表口径：</div>
+        <div>1、销售额/购物人次均减退货。</div>
+        <div>2、购物人数，当天去重隔天不去重，跨门店不去重。</div>
+        <div>3、外国人国籍不含未知、中国大陆、香港、澳门、台湾。新增需求：将国籍中的【中国】国籍拆分成中国大陆、香港、澳门、台湾。</div>
+
+        <h4>五、补充新增内容</h4>
+        <div>（一）顾客画像</div>
+        <div>1、新增需求：新增【是否展示线上/线下】按钮。</div>
+        <div>2、明细表：EOP全门店。</div>
+        <div>3、业务类型：默认全部，取全数据自定义报表的【业务类型】-“有税”、“免税”，未匹配到的为“其它”。</div>
+        <div>4、年龄段：16—19、20-23、24-28、29-33、34-40、41-45、46-50、50以上。</div>
+        <div>5、是否国潮产品：是、否。</div>
+        <div>（二）顾客购买</div>
+        <div>1、修改名称为【进出境口岸】。</div>
+        <div>2、明确EOP全门店。</div>
+        <div>（三）市内店</div>
+        <div>分成周报和月报。</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
+
+    const requirementBtn = document.getElementById('requirementBtn');
+    const requirementModal = document.getElementById('requirementModal');
+    const requirementCloseBtn = document.getElementById('requirementCloseBtn');
+
+    if (requirementBtn && requirementModal && requirementCloseBtn) {
+      requirementBtn.addEventListener('click', () => {
+        requirementModal.classList.add('open');
+      });
+      requirementCloseBtn.addEventListener('click', () => {
+        requirementModal.classList.remove('open');
+      });
+      requirementModal.addEventListener('click', e => {
+        if (e.target === requirementModal) requirementModal.classList.remove('open');
+      });
+      document.addEventListener('keydown', e => {
+        if (e.key === 'Escape') requirementModal.classList.remove('open');
+      });
+    }
+    const chineseNations = ['中国大陆', '香港', '澳门', '台湾'];
+    const foreignNations = ['美国', '日本', '韩国', '法国', '德国', '英国', '加拿大', '澳大利亚', '新加坡', '阿联酋', '泰国', '马来西亚', '印度', '巴西', '南非'];
+
+    const nationSelect = document.getElementById('nationSelect');
+    const foreignSelect = document.getElementById('foreignSelect');
+    const storeSelect = document.getElementById('storeSelect');
+    const queryBtn = document.getElementById('queryBtn');
+    const startTimeInput = document.getElementById('startTimeInput');
+    const endTimeInput = document.getElementById('endTimeInput');
+    const portraitDetailBody = document.getElementById('portraitDetailBody');
+    const entryDetailBody = document.getElementById('entryDetailBody');
+    const cityWeeklyBody = document.getElementById('cityWeeklyBody');
+    const cityMonthlyBody = document.getElementById('cityMonthlyBody');
+
+    function setNationOptions(list, keepValue) {
+      nationSelect.innerHTML = '';
+      const all = document.createElement('option');
+      all.value = '全部';
+      all.textContent = '全部';
+      nationSelect.appendChild(all);
+
+      list.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        nationSelect.appendChild(option);
+      });
+
+      if (keepValue && Array.from(nationSelect.options).some(opt => opt.value === keepValue)) {
+        nationSelect.value = keepValue;
+      } else {
+        nationSelect.value = '全部';
+      }
+    }
+
+    function applyForeignToNation() {
+      const previous = nationSelect.value;
+      if (foreignSelect.value === '否') {
+        setNationOptions(chineseNations, previous);
+      } else if (foreignSelect.value === '是') {
+        setNationOptions(foreignNations, previous);
+      } else {
+        setNationOptions([...chineseNations, ...foreignNations], previous);
+      }
+    }
+
+    function applyNationToForeign() {
+      const nation = nationSelect.value;
+      if (nation === '全部') return;
+      foreignSelect.value = chineseNations.includes(nation) ? '否' : '是';
+    }
+
+    foreignSelect.addEventListener('change', applyForeignToNation);
+    nationSelect.addEventListener('change', applyNationToForeign);
+
+    const detailRowSource = {
+      portrait: portraitDetailBody
+        ? Array.from(portraitDetailBody.querySelectorAll('tr')).map(tr => ({
+            html: tr.outerHTML,
+            dateText: tr.children[1]?.textContent.trim() || ''
+          }))
+        : [],
+      entry: entryDetailBody
+        ? Array.from(entryDetailBody.querySelectorAll('tr')).map(tr => ({
+            html: tr.outerHTML,
+            dateText: tr.children[1]?.textContent.trim() || ''
+          }))
+        : []
+    };
+
+    const defaultStoreOptions = storeSelect
+      ? Array.from(storeSelect.options).map(opt => ({ value: opt.value, text: opt.textContent }))
+      : [];
+
+    const cityStores = [
+      { short: '深圳', full: '7083深圳市内店' },
+      { short: '广州', full: '7084广州市内店' },
+      { short: '西安', full: '7098西安市内店' },
+      { short: '天津', full: '7091天津市内店（免税）/7101天津市内店（有税）' },
+      { short: '福州', full: '7096福州市内店' },
+      { short: '厦门', full: '6608厦门市内店（免税）/6976厦门市内店（有税）' },
+      { short: '大连', full: '6610大连市内店（免税）/6974大连市内店（有税）' },
+      { short: '青岛', full: '6609青岛市内店（免税）/6975青岛市内店（有税）' },
+      { short: '成都', full: '7097成都市内店' },
+      { short: '三亚', full: '7090三亚市内店（离境）' },
+      { short: '哈尔滨', full: '7082哈尔滨市内店（免税）/7092（有税）' }
+    ];
+
+    const cityWeeklyTemplates = [
+      ['285.32','168.45','30.00','198.45','45.21','32.18','8.56','4.47','22.6','38.72','8.56','42','47.28','12.35','1.85','6.42','0.66','8.22','1.12','31.40','78.68'],
+      ['156.78','96.34','16.00','112.34','28.93','21.45','4.82','2.66','19.8','22.15','4.82','28','26.97','6.78','0.98','3.21','0.44','4.35','0.70','17.62','44.59'],
+      ['342.56','210.78','46.00','256.78','62.34','48.92','9.23','4.19','24.1','42.56','9.23','56','51.79','15.67','2.06','8.73','0.88','11.24','1.53','40.11','91.90']
+    ];
+
+    const cityMonthlyTemplates = [
+      ['198.45','30.00','168.45','38.72','8.56','47.28','245.73','32.18','6.60','25.58','12.03','44.21','18.0%','86.30','5420','1102','4318','1278','215','820','7733','1305','883','215','668','276','58','1885','723'],
+      ['112.34','16.00','96.34','22.15','4.82','26.97','139.31','21.45','4.20','17.25','7.48','28.93','20.8%','52.40','3320','688','2632','906','143','533','4902','902','642','151','491','197','33','1330','412'],
+      ['256.78','46.00','210.78','42.56','9.23','51.79','308.57','48.92','9.86','39.06','13.42','62.34','20.2%','116.84','7386','1620','5766','1644','280','1091','10401','1785','966','241','725','398','71','2401','966']
+    ];
+
+    function setStoreOptionsByTab(tabName) {
+      if (!storeSelect) return;
+      const previous = storeSelect.value;
+      const source = tabName === 'city'
+        ? [{ value: '全部', text: '全部' }, ...cityStores.map(item => ({ value: item.short, text: item.short }))]
+        : defaultStoreOptions;
+
+      storeSelect.innerHTML = source.map(item => `<option value="${item.value}">${item.text}</option>`).join('');
+      if (source.some(item => item.value === previous)) {
+        storeSelect.value = previous;
+      } else {
+        storeSelect.value = '全部';
+      }
+    }
+
+    function renderCityTables(selectedShort = '全部') {
+      if (!cityWeeklyBody || !cityMonthlyBody) return;
+      const list = selectedShort && selectedShort !== '全部'
+        ? cityStores.filter(item => item.short === selectedShort)
+        : cityStores;
+
+      if (!list.length) {
+        cityWeeklyBody.innerHTML = '<tr><td colspan="22">暂无数据</td></tr>';
+        cityMonthlyBody.innerHTML = '<tr><td colspan="30">暂无数据</td></tr>';
+        return;
+      }
+
+      cityWeeklyBody.innerHTML = list.map((item, index) => {
+        const values = cityWeeklyTemplates[index % cityWeeklyTemplates.length];
+        return `<tr><td>${item.full}</td>${values.map(v => `<td>${v}</td>`).join('')}</tr>`;
+      }).join('');
+
+      cityMonthlyBody.innerHTML = list.map((item, index) => {
+        const values = cityMonthlyTemplates[index % cityMonthlyTemplates.length];
+        return `<tr><td>${item.full}</td>${values.map(v => `<td>${v}</td>`).join('')}</tr>`;
+      }).join('');
+    }
+
+    if (storeSelect) {
+      storeSelect.addEventListener('change', () => {
+        if (document.querySelector('.tab.active')?.dataset.tab === 'city') {
+          renderCityTables(storeSelect.value);
+        }
+      });
+    }
+
+    function pad2(value) {
+      return String(value).padStart(2, '0');
+    }
+
+    function buildDate(y, m, d) {
+      const date = new Date(y, m - 1, d);
+      if (
+        Number.isNaN(date.getTime()) ||
+        date.getFullYear() !== y ||
+        date.getMonth() !== m - 1 ||
+        date.getDate() !== d
+      ) {
+        return null;
+      }
+      return date;
+    }
+
+    function parseDateText(text) {
+      if (!text) return null;
+      const raw = text.trim();
+
+      let matched = raw.match(/^(\d{4})年(\d{1,2})月(\d{1,2})日$/);
+      if (matched) {
+        return buildDate(Number(matched[1]), Number(matched[2]), Number(matched[3]));
+      }
+
+      matched = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (matched) {
+        return buildDate(Number(matched[1]), Number(matched[2]), Number(matched[3]));
+      }
+
+      matched = raw.match(/^(\d{4})-(\d{1,2})$/);
+      if (matched) {
+        return buildDate(Number(matched[1]), Number(matched[2]), 1);
+      }
+
+      matched = raw.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
+      if (matched) {
+        return buildDate(Number(matched[1]), Number(matched[2]), Number(matched[3]));
+      }
+
+      return null;
+    }
+
+    function toZhDateText(date) {
+      return `${date.getFullYear()}年${pad2(date.getMonth() + 1)}月${pad2(date.getDate())}日`;
+    }
+
+    function getFilterDateRange() {
+      const startDate = parseDateText(startTimeInput?.value);
+      const endDate = parseDateText(endTimeInput?.value);
+
+      if (startDate && startTimeInput) {
+        startTimeInput.value = toZhDateText(startDate);
+      }
+      if (endDate && endTimeInput) {
+        endTimeInput.value = toZhDateText(endDate);
+      }
+
+      if (startDate && endDate && startDate > endDate) {
+        return { startDate: endDate, endDate: startDate };
+      }
+      return { startDate, endDate };
+    }
+
+    function inDateRange(date, startDate, endDate) {
+      if (!date) return true;
+      if (startDate && date < startDate) return false;
+      if (endDate && date > endDate) return false;
+      return true;
+    }
+
+    function renderDetailRows(tbody, rows) {
+      if (!tbody) return;
+      if (!rows.length) {
+        const colCount = tbody.closest('table')?.querySelector('thead tr:last-child')?.children.length || 1;
+        tbody.innerHTML = `<tr><td colspan="${colCount}">暂无数据</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = rows.map(item => item.html).join('');
+    }
+
+    function applyDateFilter() {
+      const { startDate, endDate } = getFilterDateRange();
+      const portraitRows = detailRowSource.portrait.filter(item => inDateRange(parseDateText(item.dateText), startDate, endDate));
+      const entryRows = detailRowSource.entry.filter(item => inDateRange(parseDateText(item.dateText), startDate, endDate));
+
+      renderDetailRows(portraitDetailBody, portraitRows);
+      renderDetailRows(entryDetailBody, entryRows);
+    }
+
+    if (queryBtn) queryBtn.addEventListener('click', applyDateFilter);
+
+    const entryTypeSelect = document.getElementById('entryTypeSelect');
+    const entrySummaryBody = document.getElementById('entrySummaryBody');
+
+    const entryStores = [
+      '[6826]广州新免免税品有限公司',
+      '[6852]中免集团昆明机场免税品有限公司',
+      '[6853]上海港中免免税品有限公司',
+      '[6764]湖南中免免税品有限责任公司',
+      '[6791]厦门东免免税品有限公司',
+      '[6795]海南海航中免免税品有限公司',
+      '[6850]青岛新免免税品有限责任公司',
+      '[6851]中免集团沈阳免税品商贸有限责任公司',
+      '[6912]中免集团（武汉）机场免税品有限公司',
+      '[6918]中免集团南京机场进境免税品有限公司',
+      '[6702]黑河市中免免税店有限责任公司',
+      '[6118]西安咸阳国际机场免税品有限公司',
+      '[6810]乌鲁木齐市中免免税品有限责任公司',
+      '[6743]满洲里中免免税品有限责任公司'
+    ];
+    const entryColumnIndexes = [0, 6, 1, 8, 5, 17, 7, 10, 11, 9, 19, 14, 15, 20];
+
+    const entryMatrix = {
+      outbound: {
+        '合计': [62.8,58.6,74.3,43.2,55.8,60.2,34.4,39.3,31.6,28.7,26.5,24.8,22.9,19.7,21.2,18.4,37.5,33.6,48.2,16.9,14.2],
+        '香港': [12.6,8.2,15.4,7.8,9.7,10.8,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+        '澳门': [8.3,7.1,9.8,6.1,8.5,11.4,5.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+        '日本': [5.2,4.8,6.4,3.7,4.3,5.1,2.8,3.3,2.9,2.7,2.3,1.9,1.8,1.5,1.4,1.2,2.4,2.1,3.0,1.1,0.9],
+        '美国': [7.8,6.9,8.6,5.4,6.1,6.8,4.2,5.0,4.4,3.8,3.4,3.2,2.9,2.6,2.4,2.0,3.1,2.8,4.2,1.6,1.3]
+      },
+      inbound: {
+        '合计': [71.4,66.8,83.9,49.5,63.2,68.4,39.1,45.7,36.8,33.1,29.4,27.7,25.8,22.1,24.6,20.7,41.6,38.2,53.5,19.6,16.1],
+        '中国大陆': [16.2,14.8,19.5,9.4,11.8,12.6,6.4,7.1,5.8,4.9,4.2,3.8,3.4,3.1,3.0,2.5,4.7,4.2,6.3,2.2,1.8],
+        '台湾': [7.3,6.2,8.4,4.1,5.2,5.6,3.3,3.9,3.1,2.8,2.3,2.1,1.9,1.6,1.7,1.3,2.4,2.1,3.2,1.1,0.9],
+        '韩国': [6.6,5.8,7.3,4.2,5.1,5.7,3.5,4.1,3.3,3.0,2.4,2.2,2.0,1.7,1.8,1.4,2.6,2.3,3.4,1.2,1.0],
+        '新加坡': [4.9,4.1,5.6,3.2,4.0,4.3,2.5,2.9,2.3,2.0,1.7,1.5,1.4,1.1,1.2,1.0,1.8,1.6,2.4,0.9,0.7]
+      },
+      other: {
+        '合计': [8.6,7.5,9.6,5.3,6.8,7.2,4.7,5.4,4.0,3.7,2.9,2.8,2.3,2.1,1.9,1.5,3.0,2.6,3.7,1.1,0.8],
+        '香港': [1.4,1.1,1.8,0.9,1.2,1.3,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+        '澳门': [0.9,0.8,1.2,0.6,0.7,0.9,0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
+        '法国': [1.1,1.0,1.3,0.7,0.9,0.8,0.6,0.9,0.5,0.4,0.4,0.4,0.3,0.3,0.2,0.2,0.5,0.4,0.6,0.2,0.1],
+        '德国': [0.8,0.7,0.9,0.5,0.6,0.7,0.4,0.5,0.4,0.3,0.3,0.2,0.2,0.2,0.2,0.1,0.3,0.3,0.4,0.1,0.1]
+      }
+    };
+
+    function buildAllMatrix() {
+      const source = [entryMatrix.outbound, entryMatrix.inbound, entryMatrix.other];
+      const merged = {};
+      source.forEach(group => {
+        Object.entries(group).forEach(([nation, values]) => {
+          if (!merged[nation]) merged[nation] = Array(values.length).fill(0);
+          values.forEach((v, i) => merged[nation][i] += v);
+        });
+      });
+      return merged;
+    }
+
+    entryMatrix.all = buildAllMatrix();
+
+    function renderEntrySummary(type) {
+      const matrix = entryMatrix[type] || entryMatrix.all;
+      const ordered = Object.keys(matrix).includes('合计')
+        ? ['合计', ...Object.keys(matrix).filter(k => k !== '合计')]
+        : Object.keys(matrix);
+
+      entrySummaryBody.innerHTML = ordered.map(nation => {
+        const values = matrix[nation] || [];
+        const displayValues = entryColumnIndexes.map(index => Number(values[index] || 0));
+        const sum = displayValues.reduce((acc, cur) => acc + cur, 0);
+        const cells = displayValues
+          .map(v => `<td>${v.toFixed(2)}</td>`)
+          .join('');
+        return `<tr><td>${nation}</td>${cells}<td>${sum.toFixed(2)}</td></tr>`;
+      }).join('');
+    }
+
+    if (entryTypeSelect) {
+      entryTypeSelect.addEventListener('change', e => {
+        renderEntrySummary(e.target.value);
+      });
+      renderEntrySummary('all');
+    }
+
+    const citySwitchBtns = document.querySelectorAll('.city-report-switch button');
+    const cityViewPanels = document.querySelectorAll('.city-view');
+    const cityTitle = document.getElementById('cityTitle');
+
+    function setCityView(view) {
+      citySwitchBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.cityView === view));
+      cityViewPanels.forEach(panel => panel.classList.toggle('active', panel.dataset.cityViewPanel === view));
+      if (cityTitle) {
+        cityTitle.textContent = view === 'monthly'
+          ? '市内店销售额统计（2026年2月）（金额：万元）'
+          : '市内店销售额统计（本周3.12-3.18）（金额：万元）';
+      }
+    }
+
+    citySwitchBtns.forEach(btn => {
+      btn.addEventListener('click', () => setCityView(btn.dataset.cityView));
+    });
+
+    function applyFilterByTab(tabName) {
+      document.querySelectorAll('.filter-non-city').forEach(el => {
+        el.classList.toggle('hidden-col', tabName === 'city');
+      });
+      setStoreOptionsByTab(tabName);
+      if (tabName === 'city') {
+        renderCityTables(storeSelect?.value || '全部');
+      }
+    }
+
+    const columnState = { channel: true, nation: true };
+
+    function applyColumnVisibility() {
+      document.querySelectorAll('.col-channel').forEach(el => {
+        el.classList.toggle('hidden-col', !columnState.channel);
+      });
+      document.querySelectorAll('.col-nation').forEach(el => {
+        el.classList.toggle('hidden-col', !columnState.nation);
+      });
+    }
+
+    document.querySelectorAll('.toggle-control').forEach(control => {
+      const col = control.dataset.targetCol;
+      const buttons = control.querySelectorAll('.toggle-btn');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          columnState[col] = btn.dataset.value === 'yes';
+          applyColumnVisibility();
+        });
+      });
+    });
+
+    function activateTab(tabName) {
+      tabs.forEach(t => t.classList.remove('active'));
+      panels.forEach(p => p.classList.remove('active'));
+      const targetTab = document.querySelector(`.tab[data-tab="${tabName}"]`);
+      const targetPanel = document.getElementById(tabName);
+      if (targetTab && targetPanel) {
+        targetTab.classList.add('active');
+        targetPanel.classList.add('active');
+      }
+    }
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        activateTab(tab.dataset.tab);
+        applyFilterByTab(tab.dataset.tab);
+        const map = { portrait: 'fig1', entry: 'fig3', city: 'fig4' };
+        const url = new URL(window.location.href);
+        url.searchParams.set('view', map[tab.dataset.tab]);
+        window.history.replaceState({}, '', url.toString());
+      });
+    });
+
+    function openByQuery() {
+      const view = new URLSearchParams(window.location.search).get('view');
+      if (view === 'fig2') {
+        activateTab('portrait');
+        applyFilterByTab('portrait');
+      } else if (view === 'fig3') {
+        activateTab('entry');
+        applyFilterByTab('entry');
+      } else if (view === 'fig4') {
+        activateTab('city');
+        applyFilterByTab('city');
+      } else {
+        activateTab('portrait');
+        applyFilterByTab('portrait');
+      }
+
+      const targetId = ['fig1', 'fig2', 'fig3', 'fig4'].includes(view) ? view : 'fig1';
+      requestAnimationFrame(() => {
+        document.getElementById(targetId)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+
+    setNationOptions([...chineseNations, ...foreignNations]);
+    setStoreOptionsByTab('portrait');
+    renderCityTables('全部');
+    setCityView('weekly');
+    applyColumnVisibility();
+    openByQuery();
+  </script>
+</body>
+</html>
