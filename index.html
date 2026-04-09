@@ -46,7 +46,7 @@
       align-items: center;
       gap: 10px;
       min-width: 180px;
-      font-size: 38px;
+      font-size: 28px;
       font-weight: 700;
     }
 
@@ -68,7 +68,7 @@
     .bi-nav-item {
       padding: 10px 14px;
       border-radius: 6px;
-      font-size: 30px;
+      font-size: 18px;
       font-weight: 500;
       color: rgba(255,255,255,.9);
       white-space: nowrap;
@@ -253,14 +253,6 @@
       margin-bottom: 16px;
     }
 
-    .filter h3 {
-      margin: 0 0 12px;
-      font-size: 30px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
     .filter-grid {
       display: grid;
       grid-template-columns: repeat(6, minmax(160px, 1fr));
@@ -275,7 +267,8 @@
 
     .field label {
       color: #4e5b75;
-      font-size: 16px;
+      font-size: 14px;
+      font-weight: 600;
     }
 
     .input,
@@ -283,11 +276,20 @@
       border: 1px solid #dce1eb;
       border-radius: 6px;
       background: #fff;
-      padding: 10px 12px;
-      font-size: 16px;
+      padding: 8px 10px;
+      font-size: 14px;
       color: #2d3750;
-      height: 44px;
+      height: 40px;
       width: 100%;
+    }
+
+    .select[multiple] {
+      height: 108px;
+      padding: 6px 8px;
+    }
+
+    .select[multiple] option {
+      padding: 4px 2px;
     }
 
     .actions {
@@ -301,9 +303,9 @@
       border: 1px solid var(--blue);
       color: #fff;
       border-radius: 6px;
-      height: 44px;
-      min-width: 110px;
-      font-size: 20px;
+      height: 40px;
+      min-width: 96px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
     }
@@ -327,7 +329,7 @@
       border: none;
       background: transparent;
       padding: 16px 20px;
-      font-size: 28px;
+      font-size: 20px;
       font-weight: 600;
       color: #46506a;
       cursor: pointer;
@@ -378,7 +380,7 @@
 
     .section-title {
       margin: 0;
-      font-size: 34px;
+      font-size: 24px;
       font-weight: 700;
       line-height: 1.2;
     }
@@ -440,8 +442,8 @@
     th,
     td {
       border: 1px solid #e4e8f1;
-      padding: 10px 12px;
-      font-size: 22px;
+      padding: 8px 10px;
+      font-size: 14px;
       text-align: center;
       white-space: nowrap;
       line-height: 1.4;
@@ -461,9 +463,9 @@
 
     .tag {
       display: inline-block;
-      padding: 3px 8px;
+      padding: 2px 7px;
       border-radius: 5px;
-      font-size: 18px;
+      font-size: 12px;
       font-weight: 700;
     }
 
@@ -547,10 +549,10 @@
 
     .city-report-switch button {
       border: 0;
-      padding: 9px 18px;
+      padding: 8px 14px;
       background: #fff;
       color: #5b6681;
-      font-size: 18px;
+      font-size: 14px;
       font-weight: 600;
       cursor: pointer;
     }
@@ -617,21 +619,20 @@
   <div class="page">
     <section class="card header">
       <div>
-        <p class="subtitle">数据更新时间: 2026年2月1日 09:36:26</p>
+        <p class="subtitle">数据更新时间：2026年2月1日 09:36:26</p>
       </div>
-      <button id="requirementBtn" class="btn-outline">需求描述</button>
+      <button id="requirementBtn" class="btn-outline">需求说明</button>
     </section>
 
     <section class="card filter">
-      <h3>筛选条件</h3>
       <div class="filter-grid">
-        <div class="field"><label>开始时间</label><input id="startTimeInput" class="input" value="2025年01月01日" placeholder="支持输入：XXXX年XX月XX日" /></div>
-        <div class="field"><label>结束时间</label><input id="endTimeInput" class="input" value="2026年12月31日" placeholder="支持输入：XXXX年XX月XX日" /></div>
+        <div class="field"><label>开始时间</label><input id="startTimeInput" class="input" value="2025-01" placeholder="支持输入：YYYY-MM" /></div>
+        <div class="field"><label>结束时间</label><input id="endTimeInput" class="input" value="2026-12" placeholder="支持输入：YYYY-MM" /></div>
         <div class="field filter-non-city"><label>国籍</label><select id="nationSelect" class="select"></select></div>
         <div class="field filter-non-city"><label>是否外籍</label><select id="foreignSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
-        <div class="field"><label>门店</label><select id="storeSelect" class="select"><option>全部</option><option>[6826]广州新免免税品有限公司</option><option>[6852]中免集团昆明机场免税品有限公司</option><option>[6853]上海港中免免税品有限公司</option><option>[6764]湖南中免免税品有限责任公司</option><option>[6791]厦门东免免税品有限公司</option></select></div>
-        <div class="field filter-non-city"><label>线上/线下</label><select class="select"><option>全部</option></select></div>
-        <div class="field filter-non-city"><label>是否国潮产品</label><select class="select"><option>全部</option></select></div>
+        <div class="field filter-non-city"><label>线上/线下</label><select id="channelSelect" class="select"><option>全部</option><option>线上</option><option>线下</option></select></div>
+        <div class="field filter-non-city"><label>是否国潮品牌</label><select id="guochaoSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
+        <div class="field"><label>门店</label><select id="storeSelect" class="select" multiple size="4"><option value="全部" selected>全部</option><option value="[6826]广州新免免税品有限公司">[6826]广州新免免税品有限公司</option><option value="[6852]中免集团昆明机场免税品有限公司">[6852]中免集团昆明机场免税品有限公司</option><option value="[6853]上海港中免免税品有限公司">[6853]上海港中免免税品有限公司</option><option value="[6764]湖南中免免税品有限责任公司">[6764]湖南中免免税品有限责任公司</option><option value="[6791]厦门东免免税品有限公司">[6791]厦门东免免税品有限公司</option></select></div>
         <div class="actions"><button id="queryBtn" class="btn-primary">查询</button></div>
       </div>
     </section>
@@ -803,20 +804,20 @@
               <thead>
                 <tr>
                   <th>国籍</th>
-                  <th>[6826]广州新免免税品有限公司</th>
-                  <th>[6852]中免集团昆明机场免税品有限公司</th>
-                  <th>[6853]上海港中免免税品有限公司</th>
-                  <th>[6764]湖南中免免税品有限责任公司</th>
-                  <th>[6791]厦门东免免税品有限公司</th>
-                  <th>[6795]海南海航中免免税品有限公司</th>
-                  <th>[6850]青岛新免免税品有限责任公司</th>
-                  <th>[6851]中免集团沈阳免税品商贸有限责任公司</th>
-                  <th>[6912]中免集团（武汉）机场免税品有限公司</th>
-                  <th>[6918]中免集团南京机场进境免税品有限公司</th>
-                  <th>[6702]黑河市中免免税店有限责任公司</th>
-                  <th>[6118]西安咸阳国际机场免税品有限公司</th>
-                  <th>[6810]乌鲁木齐市中免免税品有限责任公司</th>
-                  <th>[6743]满洲里中免免税品有限责任公司</th>
+                  <th>广州</th>
+                  <th>昆明</th>
+                  <th>上海</th>
+                  <th>湖南</th>
+                  <th>厦门</th>
+                  <th>海南</th>
+                  <th>青岛</th>
+                  <th>沈阳</th>
+                  <th>武汉</th>
+                  <th>南京</th>
+                  <th>黑河</th>
+                  <th>西安</th>
+                  <th>乌鲁木齐</th>
+                  <th>满洲里</th>
                   <th>汇总</th>
                 </tr>
               </thead>
@@ -835,9 +836,9 @@
                 <tr><th>序号</th><th>年月</th><th>国籍</th><th>门店</th><th>线上/线下</th><th>销售额(万元)</th><th>国潮销售额(万元)</th><th>购物人数</th><th>国潮购物人数</th></tr>
               </thead>
               <tbody id="entryDetailBody">
-                <tr><td>1</td><td>2025-01</td><td>香港</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>46.24</td><td>46.24</td><td>883</td><td>883</td></tr>
-                <tr><td>2</td><td>2025-01</td><td>香港</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>36.62</td><td>36.62</td><td>355</td><td>355</td></tr>
-                <tr><td>3</td><td>2025-01</td><td>澳门</td><td>[6852]中免集团昆明机场免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>44.38</td><td>0.00</td><td>723</td><td>0</td></tr>
+                <tr><td>1</td><td>2025-01</td><td>香港</td><td>广州</td><td><span class="tag tag-online">线上</span></td><td>46.24</td><td>46.24</td><td>883</td><td>883</td></tr>
+                <tr><td>2</td><td>2025-01</td><td>香港</td><td>广州</td><td><span class="tag tag-online">线下</span></td><td>36.62</td><td>36.62</td><td>355</td><td>355</td></tr>
+                <tr><td>3</td><td>2025-01</td><td>澳门</td><td>昆明</td><td><span class="tag tag-online">线上</span></td><td>44.38</td><td>0.00</td><td>723</td><td>0</td></tr>
               </tbody>
             </table>
           </div>
@@ -952,7 +953,7 @@
   <div id="requirementModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="requirementModalTitle">
     <div class="modal">
       <div class="modal-header">
-        <h3 id="requirementModalTitle" class="modal-title">需求背景描述</h3>
+        <h3 id="requirementModalTitle" class="modal-title">需求描述</h3>
         <button id="requirementCloseBtn" class="modal-close" type="button" aria-label="关闭">×</button>
       </div>
       <div class="modal-body">
@@ -1014,10 +1015,13 @@
 
     const nationSelect = document.getElementById('nationSelect');
     const foreignSelect = document.getElementById('foreignSelect');
+    const channelSelect = document.getElementById('channelSelect');
+    const guochaoSelect = document.getElementById('guochaoSelect');
     const storeSelect = document.getElementById('storeSelect');
     const queryBtn = document.getElementById('queryBtn');
     const startTimeInput = document.getElementById('startTimeInput');
     const endTimeInput = document.getElementById('endTimeInput');
+    const portraitSummaryBody = document.querySelector('#fig1 tbody');
     const portraitDetailBody = document.getElementById('portraitDetailBody');
     const entryDetailBody = document.getElementById('entryDetailBody');
     const cityWeeklyBody = document.getElementById('cityWeeklyBody');
@@ -1061,40 +1065,72 @@
       foreignSelect.value = chineseNations.includes(nation) ? '否' : '是';
     }
 
-    foreignSelect.addEventListener('change', applyForeignToNation);
-    nationSelect.addEventListener('change', applyNationToForeign);
+    if (foreignSelect) {
+      foreignSelect.addEventListener('change', () => {
+        applyForeignToNation();
+        applyCurrentTabFilters();
+      });
+    }
+    if (nationSelect) {
+      nationSelect.addEventListener('change', () => {
+        applyNationToForeign();
+        applyCurrentTabFilters();
+      });
+    }
 
     const detailRowSource = {
       portrait: portraitDetailBody
         ? Array.from(portraitDetailBody.querySelectorAll('tr')).map(tr => ({
             html: tr.outerHTML,
-            dateText: tr.children[1]?.textContent.trim() || ''
+            dateText: tr.children[1]?.textContent.trim() || '',
+            nation: tr.children[2]?.textContent.trim() || '',
+            store: tr.children[3]?.textContent.trim() || '',
+            channel: tr.children[4]?.textContent.trim() || '',
+            guochao: tr.children[7]?.textContent.trim() || ''
           }))
         : [],
       entry: entryDetailBody
         ? Array.from(entryDetailBody.querySelectorAll('tr')).map(tr => ({
             html: tr.outerHTML,
-            dateText: tr.children[1]?.textContent.trim() || ''
+            dateText: tr.children[1]?.textContent.trim() || '',
+            nation: tr.children[2]?.textContent.trim() || '',
+            store: tr.children[3]?.textContent.trim() || '',
+            channel: tr.children[4]?.textContent.trim() || '',
+            guochaoAmount: tr.children[6]?.textContent.trim() || '0'
           }))
         : []
     };
+
+    const summaryRowSource = portraitSummaryBody
+      ? Array.from(portraitSummaryBody.querySelectorAll('tr')).map(tr => ({
+          html: tr.outerHTML,
+          store: tr.children[0]?.textContent.trim() || '',
+          channel: tr.children[1]?.textContent.trim() || '',
+          nation: tr.children[2]?.textContent.trim() || ''
+        }))
+      : [];
 
     const defaultStoreOptions = storeSelect
       ? Array.from(storeSelect.options).map(opt => ({ value: opt.value, text: opt.textContent }))
       : [];
 
+    const entryStoreOptions = [
+      '广州', '昆明', '上海', '湖南', '厦门', '海南', '青岛',
+      '沈阳', '武汉', '南京', '黑河', '西安', '乌鲁木齐', '满洲里'
+    ].map(name => ({ value: name, text: name }));
+
     const cityStores = [
-      { short: '深圳', full: '7083深圳市内店' },
-      { short: '广州', full: '7084广州市内店' },
-      { short: '西安', full: '7098西安市内店' },
-      { short: '天津', full: '7091天津市内店（免税）/7101天津市内店（有税）' },
-      { short: '福州', full: '7096福州市内店' },
-      { short: '厦门', full: '6608厦门市内店（免税）/6976厦门市内店（有税）' },
-      { short: '大连', full: '6610大连市内店（免税）/6974大连市内店（有税）' },
-      { short: '青岛', full: '6609青岛市内店（免税）/6975青岛市内店（有税）' },
-      { short: '成都', full: '7097成都市内店' },
-      { short: '三亚', full: '7090三亚市内店（离境）' },
-      { short: '哈尔滨', full: '7082哈尔滨市内店（免税）/7092（有税）' }
+      { value: '深圳' },
+      { value: '广州' },
+      { value: '西安' },
+      { value: '天津' },
+      { value: '福州' },
+      { value: '厦门' },
+      { value: '大连' },
+      { value: '青岛' },
+      { value: '成都' },
+      { value: '三亚' },
+      { value: '哈尔滨' }
     ];
 
     const cityWeeklyTemplates = [
@@ -1109,26 +1145,61 @@
       ['256.78','46.00','210.78','42.56','9.23','51.79','308.57','48.92','9.86','39.06','13.42','62.34','20.2%','116.84','7386','1620','5766','1644','280','1091','10401','1785','966','241','725','398','71','2401','966']
     ];
 
-    function setStoreOptionsByTab(tabName) {
-      if (!storeSelect) return;
-      const previous = storeSelect.value;
-      const source = tabName === 'city'
-        ? [{ value: '全部', text: '全部' }, ...cityStores.map(item => ({ value: item.short, text: item.short }))]
-        : defaultStoreOptions;
+    function getSelectedStoreValues() {
+      if (!storeSelect) return [];
+      return Array.from(storeSelect.selectedOptions).map(opt => opt.value);
+    }
 
-      storeSelect.innerHTML = source.map(item => `<option value="${item.value}">${item.text}</option>`).join('');
-      if (source.some(item => item.value === previous)) {
-        storeSelect.value = previous;
-      } else {
-        storeSelect.value = '全部';
+    function normalizeStoreSelection() {
+      if (!storeSelect) return;
+      const selectedValues = getSelectedStoreValues();
+      if (!selectedValues.length) {
+        Array.from(storeSelect.options).forEach(opt => {
+          opt.selected = opt.value === '全部';
+        });
+        return;
+      }
+
+      if (selectedValues.includes('全部') && selectedValues.length > 1) {
+        Array.from(storeSelect.options).forEach(opt => {
+          opt.selected = opt.value !== '全部';
+        });
       }
     }
 
-    function renderCityTables(selectedShort = '全部') {
+    function getEffectiveStoreValues() {
+      const selectedValues = getSelectedStoreValues();
+      if (!selectedValues.length || selectedValues.includes('全部')) return [];
+      return selectedValues;
+    }
+
+    function setStoreOptionsByTab(tabName) {
+      if (!storeSelect) return;
+      const previous = getSelectedStoreValues();
+      let source = defaultStoreOptions;
+
+      if (tabName === 'entry') {
+        source = [{ value: '全部', text: '全部' }, ...entryStoreOptions];
+      } else if (tabName === 'city') {
+        source = [{ value: '全部', text: '全部' }, ...cityStores.map(item => ({ value: item.value, text: item.value }))];
+      }
+
+      storeSelect.innerHTML = source.map(item => `<option value="${item.value}">${item.text}</option>`).join('');
+
+      const recover = previous.filter(value => source.some(item => item.value === value));
+      const selected = recover.length ? recover : ['全部'];
+      Array.from(storeSelect.options).forEach(opt => {
+        opt.selected = selected.includes(opt.value);
+      });
+      normalizeStoreSelection();
+    }
+
+    function renderCityTables(selectedStores = []) {
       if (!cityWeeklyBody || !cityMonthlyBody) return;
-      const list = selectedShort && selectedShort !== '全部'
-        ? cityStores.filter(item => item.short === selectedShort)
-        : cityStores;
+      const selectedSet = new Set(selectedStores);
+      const list = !selectedStores.length
+        ? cityStores
+        : cityStores.filter(item => selectedSet.has(item.value));
 
       if (!list.length) {
         cityWeeklyBody.innerHTML = '<tr><td colspan="22">暂无数据</td></tr>';
@@ -1138,20 +1209,19 @@
 
       cityWeeklyBody.innerHTML = list.map((item, index) => {
         const values = cityWeeklyTemplates[index % cityWeeklyTemplates.length];
-        return `<tr><td>${item.full}</td>${values.map(v => `<td>${v}</td>`).join('')}</tr>`;
+        return `<tr><td>${item.value}</td>${values.map(v => `<td>${v}</td>`).join('')}</tr>`;
       }).join('');
 
       cityMonthlyBody.innerHTML = list.map((item, index) => {
         const values = cityMonthlyTemplates[index % cityMonthlyTemplates.length];
-        return `<tr><td>${item.full}</td>${values.map(v => `<td>${v}</td>`).join('')}</tr>`;
+        return `<tr><td>${item.value}</td>${values.map(v => `<td>${v}</td>`).join('')}</tr>`;
       }).join('');
     }
 
     if (storeSelect) {
       storeSelect.addEventListener('change', () => {
-        if (document.querySelector('.tab.active')?.dataset.tab === 'city') {
-          renderCityTables(storeSelect.value);
-        }
+        normalizeStoreSelection();
+        applyCurrentTabFilters();
       });
     }
 
@@ -1172,62 +1242,61 @@
       return date;
     }
 
-    function parseDateText(text) {
+    function parseAnyDate(text) {
       if (!text) return null;
       const raw = text.trim();
-
-      let matched = raw.match(/^(\d{4})年(\d{1,2})月(\d{1,2})日$/);
-      if (matched) {
-        return buildDate(Number(matched[1]), Number(matched[2]), Number(matched[3]));
-      }
-
-      matched = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
-      if (matched) {
-        return buildDate(Number(matched[1]), Number(matched[2]), Number(matched[3]));
-      }
-
+      let matched = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (matched) return buildDate(Number(matched[1]), Number(matched[2]), Number(matched[3]));
       matched = raw.match(/^(\d{4})-(\d{1,2})$/);
-      if (matched) {
-        return buildDate(Number(matched[1]), Number(matched[2]), 1);
-      }
-
-      matched = raw.match(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/);
-      if (matched) {
-        return buildDate(Number(matched[1]), Number(matched[2]), Number(matched[3]));
-      }
-
+      if (matched) return buildDate(Number(matched[1]), Number(matched[2]), 1);
       return null;
     }
 
-    function toZhDateText(date) {
-      return `${date.getFullYear()}年${pad2(date.getMonth() + 1)}月${pad2(date.getDate())}日`;
+    function toMonthKey(text) {
+      const matched = text?.trim().match(/^(\d{4})-(\d{1,2})$/);
+      if (!matched) return null;
+      const year = Number(matched[1]);
+      const month = Number(matched[2]);
+      if (month < 1 || month > 12) return null;
+      return year * 100 + month;
     }
 
-    function getFilterDateRange() {
-      const startDate = parseDateText(startTimeInput?.value);
-      const endDate = parseDateText(endTimeInput?.value);
-
-      if (startDate && startTimeInput) {
-        startTimeInput.value = toZhDateText(startDate);
-      }
-      if (endDate && endTimeInput) {
-        endTimeInput.value = toZhDateText(endDate);
-      }
-
-      if (startDate && endDate && startDate > endDate) {
-        return { startDate: endDate, endDate: startDate };
-      }
-      return { startDate, endDate };
+    function toRowMonthKey(text) {
+      const monthMatched = text?.trim().match(/^(\d{4})-(\d{1,2})$/);
+      if (monthMatched) return Number(monthMatched[1]) * 100 + Number(monthMatched[2]);
+      const dayMatched = text?.trim().match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/);
+      if (dayMatched) return Number(dayMatched[1]) * 100 + Number(dayMatched[2]);
+      return null;
     }
 
-    function inDateRange(date, startDate, endDate) {
-      if (!date) return true;
-      if (startDate && date < startDate) return false;
-      if (endDate && date > endDate) return false;
-      return true;
+    function toDayText(date) {
+      return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}-${pad2(date.getDate())}`;
     }
 
-    function renderDetailRows(tbody, rows) {
+    function toMonthText(date) {
+      return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}`;
+    }
+
+    function setDateInputsByTab(tabName) {
+      if (!startTimeInput || !endTimeInput) return;
+      const start = parseAnyDate(startTimeInput.value) || buildDate(2025, 1, 1);
+      const end = parseAnyDate(endTimeInput.value) || buildDate(2026, 12, 31);
+      if (tabName === 'city') {
+        const activeCityView = document.querySelector('.city-report-switch button.active')?.dataset.cityView || 'weekly';
+        const range = cityDateRanges[activeCityView] || cityDateRanges.weekly;
+        startTimeInput.placeholder = '支持输入：YYYY-MM-DD';
+        endTimeInput.placeholder = '支持输入：YYYY-MM-DD';
+        startTimeInput.value = range.start || toDayText(start);
+        endTimeInput.value = range.end || toDayText(end);
+      } else {
+        startTimeInput.placeholder = '支持输入：YYYY-MM';
+        endTimeInput.placeholder = '支持输入：YYYY-MM';
+        startTimeInput.value = toMonthText(start);
+        endTimeInput.value = toMonthText(end);
+      }
+    }
+
+    function renderRows(tbody, rows) {
       if (!tbody) return;
       if (!rows.length) {
         const colCount = tbody.closest('table')?.querySelector('thead tr:last-child')?.children.length || 1;
@@ -1237,36 +1306,87 @@
       tbody.innerHTML = rows.map(item => item.html).join('');
     }
 
-    function applyDateFilter() {
-      const { startDate, endDate } = getFilterDateRange();
-      const portraitRows = detailRowSource.portrait.filter(item => inDateRange(parseDateText(item.dateText), startDate, endDate));
-      const entryRows = detailRowSource.entry.filter(item => inDateRange(parseDateText(item.dateText), startDate, endDate));
+    function filterPortraitRows() {
+      const startMonth = toMonthKey(startTimeInput?.value || '');
+      const endMonth = toMonthKey(endTimeInput?.value || '');
+      const nation = nationSelect?.value || '全部';
+      const channel = channelSelect?.value || '全部';
+      const guochao = guochaoSelect?.value || '全部';
+      const selectedStores = new Set(getEffectiveStoreValues());
 
-      renderDetailRows(portraitDetailBody, portraitRows);
-      renderDetailRows(entryDetailBody, entryRows);
+      const isMonthMatch = monthKey => {
+        if (!monthKey) return true;
+        if (startMonth && monthKey < startMonth) return false;
+        if (endMonth && monthKey > endMonth) return false;
+        return true;
+      };
+
+      const isStoreMatch = store => !selectedStores.size || selectedStores.has(store);
+      const isChannelMatch = text => channel === '全部' || text.includes(channel);
+
+      const summaryRows = summaryRowSource.filter(item => {
+        if (nation !== '全部' && item.nation !== nation) return false;
+        return isStoreMatch(item.store) && isChannelMatch(item.channel);
+      });
+
+      const detailRows = detailRowSource.portrait.filter(item => {
+        const monthKey = toRowMonthKey(item.dateText);
+        if (!isMonthMatch(monthKey)) return false;
+        if (nation !== '全部' && item.nation !== nation) return false;
+        if (!isStoreMatch(item.store)) return false;
+        if (!isChannelMatch(item.channel)) return false;
+        if (guochao !== '全部' && item.guochao !== guochao) return false;
+        return true;
+      });
+
+      renderRows(portraitSummaryBody, summaryRows);
+      renderRows(portraitDetailBody, detailRows);
     }
 
-    if (queryBtn) queryBtn.addEventListener('click', applyDateFilter);
+    function filterEntryRows() {
+      const startMonth = toMonthKey(startTimeInput?.value || '');
+      const endMonth = toMonthKey(endTimeInput?.value || '');
+      const nation = nationSelect?.value || '全部';
+      const channel = channelSelect?.value || '全部';
+      const guochao = guochaoSelect?.value || '全部';
+      const selectedStores = new Set(getEffectiveStoreValues());
+
+      const rows = detailRowSource.entry.filter(item => {
+        const monthKey = toRowMonthKey(item.dateText);
+        if (monthKey && startMonth && monthKey < startMonth) return false;
+        if (monthKey && endMonth && monthKey > endMonth) return false;
+        if (nation !== '全部' && item.nation !== nation) return false;
+        if (selectedStores.size && !selectedStores.has(item.store)) return false;
+        if (channel !== '全部' && !item.channel.includes(channel)) return false;
+        if (guochao !== '全部') {
+          const amount = Number(item.guochaoAmount || '0');
+          const isGuochao = amount > 0;
+          if ((guochao === '是' && !isGuochao) || (guochao === '否' && isGuochao)) return false;
+        }
+        return true;
+      });
+
+      renderRows(entryDetailBody, rows);
+    }
+
+    function applyCurrentTabFilters() {
+      const activeTab = document.querySelector('.tab.active')?.dataset.tab || 'portrait';
+      if (activeTab === 'portrait') {
+        filterPortraitRows();
+      } else if (activeTab === 'entry') {
+        filterEntryRows();
+      } else {
+        renderCityTables(getEffectiveStoreValues());
+      }
+    }
+
+    if (channelSelect) channelSelect.addEventListener('change', applyCurrentTabFilters);
+    if (guochaoSelect) guochaoSelect.addEventListener('change', applyCurrentTabFilters);
+    if (queryBtn) queryBtn.addEventListener('click', applyCurrentTabFilters);
 
     const entryTypeSelect = document.getElementById('entryTypeSelect');
     const entrySummaryBody = document.getElementById('entrySummaryBody');
 
-    const entryStores = [
-      '[6826]广州新免免税品有限公司',
-      '[6852]中免集团昆明机场免税品有限公司',
-      '[6853]上海港中免免税品有限公司',
-      '[6764]湖南中免免税品有限责任公司',
-      '[6791]厦门东免免税品有限公司',
-      '[6795]海南海航中免免税品有限公司',
-      '[6850]青岛新免免税品有限责任公司',
-      '[6851]中免集团沈阳免税品商贸有限责任公司',
-      '[6912]中免集团（武汉）机场免税品有限公司',
-      '[6918]中免集团南京机场进境免税品有限公司',
-      '[6702]黑河市中免免税店有限责任公司',
-      '[6118]西安咸阳国际机场免税品有限公司',
-      '[6810]乌鲁木齐市中免免税品有限责任公司',
-      '[6743]满洲里中免免税品有限责任公司'
-    ];
     const entryColumnIndexes = [0, 6, 1, 8, 5, 17, 7, 10, 11, 9, 19, 14, 15, 20];
 
     const entryMatrix = {
@@ -1334,6 +1454,10 @@
     const citySwitchBtns = document.querySelectorAll('.city-report-switch button');
     const cityViewPanels = document.querySelectorAll('.city-view');
     const cityTitle = document.getElementById('cityTitle');
+    const cityDateRanges = {
+      weekly: { start: '2026-03-12', end: '2026-03-18' },
+      monthly: { start: '2026-02-01', end: '2026-02-28' }
+    };
 
     function setCityView(view) {
       citySwitchBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.cityView === view));
@@ -1343,10 +1467,19 @@
           ? '市内店销售额统计（2026年2月）（金额：万元）'
           : '市内店销售额统计（本周3.12-3.18）（金额：万元）';
       }
+
+      if (document.querySelector('.tab.active')?.dataset.tab === 'city') {
+        const range = cityDateRanges[view] || cityDateRanges.weekly;
+        if (startTimeInput) startTimeInput.value = range.start;
+        if (endTimeInput) endTimeInput.value = range.end;
+      }
     }
 
     citySwitchBtns.forEach(btn => {
-      btn.addEventListener('click', () => setCityView(btn.dataset.cityView));
+      btn.addEventListener('click', () => {
+        setCityView(btn.dataset.cityView);
+        applyCurrentTabFilters();
+      });
     });
 
     function applyFilterByTab(tabName) {
@@ -1354,9 +1487,8 @@
         el.classList.toggle('hidden-col', tabName === 'city');
       });
       setStoreOptionsByTab(tabName);
-      if (tabName === 'city') {
-        renderCityTables(storeSelect?.value || '全部');
-      }
+      setDateInputsByTab(tabName);
+      applyCurrentTabFilters();
     }
 
     const columnState = { channel: true, nation: true };
@@ -1429,7 +1561,7 @@
 
     setNationOptions([...chineseNations, ...foreignNations]);
     setStoreOptionsByTab('portrait');
-    renderCityTables('全部');
+    setDateInputsByTab('portrait');
     setCityView('weekly');
     applyColumnVisibility();
     openByQuery();
