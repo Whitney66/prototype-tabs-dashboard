@@ -707,6 +707,7 @@
         <div class="field filter-non-city"><label>线上/线下</label><select id="channelSelect" class="select"><option>全部</option><option>线上</option><option>线下</option></select></div>
         <div class="field filter-non-city"><label>是否国潮品牌</label><select id="guochaoSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
         <div class="field"><label>门店</label><div id="storeSelectWrap" class="multi-select"><button id="storeSelectBtn" type="button" class="multi-select-btn" aria-expanded="false">全部</button><div id="storeSelectPanel" class="multi-select-panel"></div></div><select id="storeSelect" class="select" multiple size="4" hidden><option value="全部" selected>全部</option><option value="[6826]广州新免免税品有限公司">[6826]广州新免免税品有限公司</option><option value="[6852]中免集团昆明机场免税品有限公司">[6852]中免集团昆明机场免税品有限公司</option><option value="[6853]上海港中免免税品有限公司">[6853]上海港中免免税品有限公司</option><option value="[6764]湖南中免免税品有限责任公司">[6764]湖南中免免税品有限责任公司</option><option value="[6791]厦门东免免税品有限公司">[6791]厦门东免免税品有限公司</option></select></div>
+        <div class="field filter-portrait-only"><label>业务类型</label><select id="businessTypeSelect" class="select"><option>全部</option><option>有税</option><option>免税</option><option>国产品退税</option><option>离境退税</option><option>其它</option></select></div>
         <div class="actions"><button id="queryBtn" class="btn-primary">查询</button></div>
       </div>
     </section>
@@ -747,28 +748,35 @@
                   <th rowspan="2">门店</th>
                   <th rowspan="2" class="col-channel">线上/线下</th>
                   <th rowspan="2" class="col-nation">国籍</th>
-                  <th colspan="5" class="th-group-yellow">门店总体销售情况年累计</th>
-                  <th colspan="5" class="th-group-purple">门店总体销售情况月累计</th>
-                  <th colspan="5" class="th-group-blue">外籍人员消费情况年累计</th>
+                  <th colspan="5" class="th-group-yellow col-store">门店总体销售情况年累计</th>
+                  <th colspan="5" class="th-group-purple col-store">门店总体销售情况月累计</th>
+                  <th colspan="5" class="th-group-blue col-foreign">外籍人员消费情况年累计</th>
+                  <th colspan="5" class="th-group-green col-foreign">外籍人员消费情况月累计</th>
                 </tr>
                 <tr>
-                  <th class="th-group-yellow">线下有税（不含离境退税）</th>
-                  <th class="th-group-yellow">离境退税</th>
-                  <th class="th-group-yellow">国潮销售额（万元）</th>
-                  <th class="th-group-yellow">购物人数</th>
-                  <th class="th-group-yellow">国潮购物人数</th>
+                  <th class="th-group-yellow col-store">线下有税（不含离境退税）</th>
+                  <th class="th-group-yellow col-store">离境退税</th>
+                  <th class="th-group-yellow col-store">国潮销售额（万元）</th>
+                  <th class="th-group-yellow col-store">购物人数</th>
+                  <th class="th-group-yellow col-store">国潮购物人数</th>
 
-                  <th class="th-group-purple">线下有税（不含离境退税）</th>
-                  <th class="th-group-purple">离境退税</th>
-                  <th class="th-group-purple">国潮销售额（万元）</th>
-                  <th class="th-group-purple">购物人数</th>
-                  <th class="th-group-purple">国潮购物人数</th>
+                  <th class="th-group-purple col-store">线下有税（不含离境退税）</th>
+                  <th class="th-group-purple col-store">离境退税</th>
+                  <th class="th-group-purple col-store">国潮销售额（万元）</th>
+                  <th class="th-group-purple col-store">购物人数</th>
+                  <th class="th-group-purple col-store">国潮购物人数</th>
 
-                  <th class="th-group-blue">线下有税（不含离境退税）</th>
-                  <th class="th-group-blue">离境退税</th>
-                  <th class="th-group-blue">国潮销售额（万元）</th>
-                  <th class="th-group-blue">购物人数</th>
-                  <th class="th-group-blue">国潮购物人数</th>
+                  <th class="th-group-blue col-foreign">线下有税（不含离境退税）</th>
+                  <th class="th-group-blue col-foreign">离境退税</th>
+                  <th class="th-group-blue col-foreign">国潮销售额（万元）</th>
+                  <th class="th-group-blue col-foreign">购物人数</th>
+                  <th class="th-group-blue col-foreign">国潮购物人数</th>
+
+                  <th class="th-group-green col-foreign">线下有税（不含离境退税）</th>
+                  <th class="th-group-green col-foreign">离境退税</th>
+                  <th class="th-group-green col-foreign">国潮销售额（万元）</th>
+                  <th class="th-group-green col-foreign">购物人数</th>
+                  <th class="th-group-green col-foreign">国潮购物人数</th>
                 </tr>
               </thead>
               <tbody>
@@ -776,49 +784,55 @@
                   <td>[6826]广州新免免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线下</span></td>
                   <td class="col-nation">中国大陆</td>
-                  <td>282.40</td><td>28.10</td><td>180.20</td><td>8450</td><td>3920</td>
-                  <td>24.60</td><td>2.20</td><td>15.60</td><td>2010</td><td>910</td>
-                  <td>0.00</td><td>0.00</td><td>0.00</td><td>0</td><td>0</td>
+                  <td class="col-store">282.40</td><td class="col-store">28.10</td><td class="col-store">180.20</td><td class="col-store">8450</td><td class="col-store">3920</td>
+                  <td class="col-store">24.60</td><td class="col-store">2.20</td><td class="col-store">15.60</td><td class="col-store">2010</td><td class="col-store">910</td>
+                  <td class="col-foreign">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0</td><td class="col-foreign">0</td>
+                  <td class="col-foreign">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0</td><td class="col-foreign">0</td>
                 </tr>
                 <tr>
                   <td>[6826]广州新免免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线上</span></td>
                   <td class="col-nation">香港</td>
-                  <td>388.30</td><td>29.47</td><td>220.31</td><td>9276</td><td>4670</td>
-                  <td>31.12</td><td>3.28</td><td>16.99</td><td>2527</td><td>1291</td>
-                  <td>39.40</td><td>6.84</td><td>46.24</td><td>883</td><td>883</td>
+                  <td class="col-store">388.30</td><td class="col-store">29.47</td><td class="col-store">220.31</td><td class="col-store">9276</td><td class="col-store">4670</td>
+                  <td class="col-store">31.12</td><td class="col-store">3.28</td><td class="col-store">16.99</td><td class="col-store">2527</td><td class="col-store">1291</td>
+                  <td class="col-foreign">39.40</td><td class="col-foreign">6.84</td><td class="col-foreign">46.24</td><td class="col-foreign">883</td><td class="col-foreign">883</td>
+                  <td class="col-foreign">3.96</td><td class="col-foreign">0.62</td><td class="col-foreign">5.14</td><td class="col-foreign">96</td><td class="col-foreign">96</td>
                 </tr>
                 <tr>
                   <td>[6852]中免集团昆明机场免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线下</span></td>
                   <td class="col-nation">澳门</td>
-                  <td>330.83</td><td>36.76</td><td>245.92</td><td>9875</td><td>6549</td>
-                  <td>38.12</td><td>4.74</td><td>42.86</td><td>1573</td><td>1573</td>
-                  <td>42.50</td><td>1.88</td><td>13.28</td><td>920</td><td>920</td>
+                  <td class="col-store">330.83</td><td class="col-store">36.76</td><td class="col-store">245.92</td><td class="col-store">9875</td><td class="col-store">6549</td>
+                  <td class="col-store">38.12</td><td class="col-store">4.74</td><td class="col-store">42.86</td><td class="col-store">1573</td><td class="col-store">1573</td>
+                  <td class="col-foreign">42.50</td><td class="col-foreign">1.88</td><td class="col-foreign">13.28</td><td class="col-foreign">920</td><td class="col-foreign">920</td>
+                  <td class="col-foreign">4.22</td><td class="col-foreign">0.21</td><td class="col-foreign">1.58</td><td class="col-foreign">108</td><td class="col-foreign">108</td>
                 </tr>
                 <tr>
                   <td>[6853]上海港中免免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线上</span></td>
                   <td class="col-nation">台湾</td>
-                  <td>302.20</td><td>24.15</td><td>326.35</td><td>10731</td><td>10731</td>
-                  <td>32.44</td><td>3.20</td><td>35.64</td><td>1623</td><td>1623</td>
-                  <td>36.01</td><td>4.01</td><td>40.02</td><td>966</td><td>966</td>
+                  <td class="col-store">302.20</td><td class="col-store">24.15</td><td class="col-store">326.35</td><td class="col-store">10731</td><td class="col-store">10731</td>
+                  <td class="col-store">32.44</td><td class="col-store">3.20</td><td class="col-store">35.64</td><td class="col-store">1623</td><td class="col-store">1623</td>
+                  <td class="col-foreign">36.01</td><td class="col-foreign">4.01</td><td class="col-foreign">40.02</td><td class="col-foreign">966</td><td class="col-foreign">966</td>
+                  <td class="col-foreign">3.74</td><td class="col-foreign">0.43</td><td class="col-foreign">4.86</td><td class="col-foreign">114</td><td class="col-foreign">114</td>
                 </tr>
                 <tr>
                   <td>[6764]湖南中免免税品有限责任公司</td>
                   <td class="col-channel"><span class="tag tag-online">线下</span></td>
                   <td class="col-nation">美国</td>
-                  <td>286.94</td><td>31.89</td><td>268.69</td><td>12323</td><td>8918</td>
-                  <td>40.88</td><td>3.07</td><td>43.95</td><td>1644</td><td>1644</td>
-                  <td>28.71</td><td>5.06</td><td>33.77</td><td>812</td><td>812</td>
+                  <td class="col-store">286.94</td><td class="col-store">31.89</td><td class="col-store">268.69</td><td class="col-store">12323</td><td class="col-store">8918</td>
+                  <td class="col-store">40.88</td><td class="col-store">3.07</td><td class="col-store">43.95</td><td class="col-store">1644</td><td class="col-store">1644</td>
+                  <td class="col-foreign">28.71</td><td class="col-foreign">5.06</td><td class="col-foreign">33.77</td><td class="col-foreign">812</td><td class="col-foreign">812</td>
+                  <td class="col-foreign">2.93</td><td class="col-foreign">0.58</td><td class="col-foreign">3.36</td><td class="col-foreign">88</td><td class="col-foreign">88</td>
                 </tr>
                 <tr>
                   <td>[6791]厦门东免免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线下</span></td>
                   <td class="col-nation">日本</td>
-                  <td>273.40</td><td>29.63</td><td>64.52</td><td>8406</td><td>1885</td>
-                  <td>37.11</td><td>3.12</td><td>20.86</td><td>1248</td><td>784</td>
-                  <td>31.77</td><td>11.54</td><td>0.00</td><td>691</td><td>0</td>
+                  <td class="col-store">273.40</td><td class="col-store">29.63</td><td class="col-store">64.52</td><td class="col-store">8406</td><td class="col-store">1885</td>
+                  <td class="col-store">37.11</td><td class="col-store">3.12</td><td class="col-store">20.86</td><td class="col-store">1248</td><td class="col-store">784</td>
+                  <td class="col-foreign">31.77</td><td class="col-foreign">11.54</td><td class="col-foreign">0.00</td><td class="col-foreign">691</td><td class="col-foreign">0</td>
+                  <td class="col-foreign">3.18</td><td class="col-foreign">1.26</td><td class="col-foreign">0.00</td><td class="col-foreign">73</td><td class="col-foreign">0</td>
                 </tr>
               </tbody>
             </table>
@@ -829,8 +843,6 @@
           <div class="section-header">
             <h2 class="section-title">明细表</h2>
             <div class="sub-filter">
-              <span>业务类型:</span>
-              <select class="select"><option>全部</option></select>
               <span>品类:</span>
               <select class="select"><option>全部</option></select>
               <span>品牌:</span>
@@ -942,12 +954,12 @@
                     <th rowspan="3">销售额合计</th>
                     <th colspan="3">免税销售额（含券、含积分）</th>
                     <th colspan="5" class="th-group-orange">外国人销售额</th>
-                    <th colspan="11" class="th-group-green">有税销售额（含券、含积分）</th>
+                    <th colspan="13" class="th-group-green">有税销售额（含券、含积分）</th>
                     <th rowspan="3">有税销售额合计（万元）</th>
                   </tr>
                   <tr>
                     <th rowspan="2">线下免税销售额</th>
-                    <th rowspan="2">线上免税预订平台销售额</th>
+                    <th rowspan="2">线上免税预定平台销售额</th>
                     <th rowspan="2">免税合计</th>
                     <th rowspan="2">外国人消费额合计</th>
                     <th rowspan="2">外国人免税销售额</th>
@@ -955,7 +967,7 @@
                     <th rowspan="2">外国人线下有税销售额</th>
                     <th rowspan="2">外国人免税及离境退税消费占比（%）</th>
                     <th colspan="4">线下有税销售额（有税经销、代销、联营）</th>
-                    <th colspan="7">线上有税销售额</th>
+                    <th colspan="9">线上有税销售额</th>
                   </tr>
                   <tr>
                     <th>线下有税销售额（不含离境退税）</th>
@@ -964,11 +976,13 @@
                     <th>线下有税小计</th>
                     <th>前海会员购销售额GMV（不计入营收统计）</th>
                     <th>前海会员购返佣</th>
-                    <th>海南直签购销售额GMV（不计入营收统计）</th>
-                    <th>海南直签购返佣</th>
+                    <th>海南如意购销售额GMV（不计入营收统计）</th>
+                    <th>海南如意购返佣</th>
                     <th>直播带货销售额GMV（不计入营收统计）</th>
                     <th>直播带货返佣</th>
-                    <th>云仓、云店、有税线上小计</th>
+                    <th>云仓</th>
+                    <th>云店</th>
+                    <th>线上有税小计</th>
                   </tr>
                 </thead>
                 <tbody id="cityWeeklyBody"></tbody>
@@ -982,37 +996,42 @@
                 <thead>
                   <tr>
                     <th rowspan="2">门店</th>
-                    <th colspan="6">2026年2月销售额</th>
-                    <th colspan="5">外国人消费金额</th>
-                    <th colspan="8">2026年2月购物人次</th>
+                    <th colspan="11">2026年2月销售额</th>
+                    <th colspan="8">外国人消费金额</th>
+                    <th colspan="7">2026年2月购物人次</th>
                     <th colspan="8">外国人购物人次</th>
                   </tr>
                   <tr>
-                    <th>免税销售额</th>
-                    <th>线上免税预订平台销售额</th>
-                    <th>线下免税销售额</th>
+                    <th>免税</th>
+                    <th>线上免税预定平台</th>
+                    <th>线下免税</th>
                     <th>线下有税（不含离境退税）</th>
                     <th>离境退税</th>
+                    <th>线上有税</th>
+                    <th>云仓、云店销售额（含券、积分）</th>
+                    <th>如意购、会员购、直播销售额（含券、积分）</th>
+                    <th>如意购、会员购、直播佣金</th>
                     <th>5.有税合计</th>
                     <th>总计</th>
-                    <th>免税销售额</th>
-                    <th>线上免税预订平台销售额</th>
-                    <th>线下免税销售额</th>
-                    <th>2.线下有税/3.离境退税</th>
+                    <th>免税</th>
+                    <th>线上免税预定平台</th>
+                    <th>线下免税</th>
+                    <th>线下有税</th>
+                    <th>离境退税</th>
                     <th>合计</th>
                     <th>外国人消费占比</th>
                     <th>国潮销售额</th>
                     <th>免税购物人数</th>
-                    <th>线上免税预订平台销售额</th>
-                    <th>线下免税销售额</th>
+                    <th>线上免税预定平台</th>
+                    <th>线下免税</th>
                     <th>线下有税（不含离境退税）</th>
                     <th>离境退税</th>
                     <th>线上有税</th>
                     <th>合计</th>
                     <th>外国人购物人数</th>
                     <th>免税购物人数</th>
-                    <th>线上免税预订平台销售额</th>
-                    <th>线下免税销售额</th>
+                    <th>线上免税预定平台</th>
+                    <th>线下免税</th>
                     <th>线下有税（不含离境退税）</th>
                     <th>离境退税</th>
                     <th>合计</th>
@@ -1095,6 +1114,7 @@
     const foreignSelect = document.getElementById('foreignSelect');
     const channelSelect = document.getElementById('channelSelect');
     const guochaoSelect = document.getElementById('guochaoSelect');
+    const businessTypeSelect = document.getElementById('businessTypeSelect');
     const storeSelect = document.getElementById('storeSelect');
     const storeSelectWrap = document.getElementById('storeSelectWrap');
     const storeSelectBtn = document.getElementById('storeSelectBtn');
@@ -1138,12 +1158,14 @@
       } else {
         setNationOptions([...chineseNations, ...foreignNations], previous);
       }
+      applyPortraitForeignColumnMode();
     }
 
     function applyNationToForeign() {
       const nation = nationSelect.value;
       if (nation === '全部') return;
       foreignSelect.value = chineseNations.includes(nation) ? '否' : '是';
+      applyPortraitForeignColumnMode();
     }
 
     if (foreignSelect) {
@@ -1167,7 +1189,8 @@
             nation: tr.children[2]?.textContent.trim() || '',
             store: tr.children[3]?.textContent.trim() || '',
             channel: tr.children[4]?.textContent.trim() || '',
-            guochao: tr.children[7]?.textContent.trim() || ''
+            guochao: tr.children[7]?.textContent.trim() || '',
+            businessType: tr.children[8]?.textContent.trim() || ''
           }))
         : [],
       entry: entryDetailBody
@@ -1215,15 +1238,15 @@
     ];
 
     const cityWeeklyTemplates = [
-      ['285.32','168.45','30.00','198.45','45.21','32.18','8.56','4.47','22.6','38.72','8.56','42','47.28','12.35','1.85','6.42','0.66','8.22','1.12','31.40','78.68'],
-      ['156.78','96.34','16.00','112.34','28.93','21.45','4.82','2.66','19.8','22.15','4.82','28','26.97','6.78','0.98','3.21','0.44','4.35','0.70','17.62','44.59'],
-      ['342.56','210.78','46.00','256.78','62.34','48.92','9.23','4.19','24.1','42.56','9.23','56','51.79','15.67','2.06','8.73','0.88','11.24','1.53','40.11','91.90']
+      ['285.32','168.45','30.00','198.45','45.21','32.18','8.56','4.47','22.6','38.72','8.56','42','47.28','12.35','1.85','6.42','0.66','8.22','1.12','9.86','10.42','11.12','78.68'],
+      ['156.78','96.34','16.00','112.34','28.93','21.45','4.82','2.66','19.8','22.15','4.82','28','26.97','6.78','0.98','3.21','0.44','4.35','0.70','5.44','5.62','6.56','44.59'],
+      ['342.56','210.78','46.00','256.78','62.34','48.92','9.23','4.19','24.1','42.56','9.23','56','51.79','15.67','2.06','8.73','0.88','11.24','1.53','12.74','13.16','14.21','91.90']
     ];
 
     const cityMonthlyTemplates = [
-      ['198.45','30.00','168.45','38.72','8.56','47.28','245.73','32.18','6.60','25.58','12.03','44.21','18.0%','86.30','5420','1102','4318','1278','215','820','7733','1305','883','215','668','276','58','1885','723'],
-      ['112.34','16.00','96.34','22.15','4.82','26.97','139.31','21.45','4.20','17.25','7.48','28.93','20.8%','52.40','3320','688','2632','906','143','533','4902','902','642','151','491','197','33','1330','412'],
-      ['256.78','46.00','210.78','42.56','9.23','51.79','308.57','48.92','9.86','39.06','13.42','62.34','20.2%','116.84','7386','1620','5766','1644','280','1091','10401','1785','966','241','725','398','71','2401','966']
+      ['198.45','30.00','168.45','38.72','8.56','11.20','6.45','9.30','1.05','58.48','256.93','32.18','6.60','25.58','10.20','1.83','44.21','18.0%','86.30','5420','1102','4318','1278','215','820','7733','1305','883','215','668','276','58','1885','723'],
+      ['112.34','16.00','96.34','22.15','4.82','6.30','3.24','4.92','0.63','33.27','145.61','21.45','4.20','17.25','6.10','1.38','28.93','20.8%','52.40','3320','688','2632','906','143','533','4902','902','642','151','491','197','33','1330','412'],
+      ['256.78','46.00','210.78','42.56','9.23','13.58','8.42','10.36','1.44','65.37','322.15','48.92','9.86','39.06','11.27','2.15','62.34','20.2%','116.84','7386','1620','5766','1644','280','1091','10401','1785','966','241','725','398','71','2401','966']
     ];
 
     function setStoreDropdownOpen(open) {
@@ -1365,8 +1388,8 @@
         : cityStores.filter(item => selectedSet.has(item.value));
 
       if (!list.length) {
-        cityWeeklyBody.innerHTML = '<tr><td colspan="22">暂无数据</td></tr>';
-        cityMonthlyBody.innerHTML = '<tr><td colspan="30">暂无数据</td></tr>';
+        cityWeeklyBody.innerHTML = '<tr><td colspan="24">暂无数据</td></tr>';
+        cityMonthlyBody.innerHTML = '<tr><td colspan="35">暂无数据</td></tr>';
         return;
       }
 
@@ -1477,6 +1500,8 @@
       const nation = nationSelect?.value || '全部';
       const channel = channelSelect?.value || '全部';
       const guochao = guochaoSelect?.value || '全部';
+      const businessType = businessTypeSelect?.value || '全部';
+      const normalizeBusinessType = value => (value === '其他' ? '其它' : value);
       const selectedStores = new Set(getEffectiveStoreValues());
 
       const isMonthMatch = monthKey => {
@@ -1501,6 +1526,7 @@
         if (!isStoreMatch(item.store)) return false;
         if (!isChannelMatch(item.channel)) return false;
         if (guochao !== '全部' && item.guochao !== guochao) return false;
+        if (businessType !== '全部' && normalizeBusinessType(item.businessType) !== normalizeBusinessType(businessType)) return false;
         return true;
       });
 
@@ -1534,9 +1560,22 @@
       renderRows(entryDetailBody, rows);
     }
 
+    function applyPortraitForeignColumnMode() {
+      const mode = foreignSelect?.value || '全部';
+      const showStoreCols = mode !== '是';
+      const showForeignCols = mode !== '否';
+      document.querySelectorAll('.col-store').forEach(el => {
+        el.classList.toggle('hidden-col', !showStoreCols);
+      });
+      document.querySelectorAll('.col-foreign').forEach(el => {
+        el.classList.toggle('hidden-col', !showForeignCols);
+      });
+    }
+
     function applyCurrentTabFilters() {
       const activeTab = document.querySelector('.tab.active')?.dataset.tab || 'portrait';
       if (activeTab === 'portrait') {
+        applyPortraitForeignColumnMode();
         filterPortraitRows();
       } else if (activeTab === 'entry') {
         filterEntryRows();
@@ -1547,6 +1586,7 @@
 
     if (channelSelect) channelSelect.addEventListener('change', applyCurrentTabFilters);
     if (guochaoSelect) guochaoSelect.addEventListener('change', applyCurrentTabFilters);
+    if (businessTypeSelect) businessTypeSelect.addEventListener('change', applyCurrentTabFilters);
     if (queryBtn) queryBtn.addEventListener('click', applyCurrentTabFilters);
 
     const entryTypeSelect = document.getElementById('entryTypeSelect');
@@ -1650,6 +1690,9 @@
     function applyFilterByTab(tabName) {
       document.querySelectorAll('.filter-non-city').forEach(el => {
         el.classList.toggle('hidden-col', tabName === 'city');
+      });
+      document.querySelectorAll('.filter-portrait-only').forEach(el => {
+        el.classList.toggle('hidden-col', tabName !== 'portrait');
       });
       setStoreOptionsByTab(tabName);
       setDateInputsByTab(tabName);
