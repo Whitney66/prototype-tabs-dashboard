@@ -700,8 +700,8 @@
 
     <section class="card filter">
       <div class="filter-grid">
-        <div class="field"><label>开始时间</label><input id="startTimeInput" class="input" value="2025-01" placeholder="支持输入：YYYY-MM" /></div>
-        <div class="field"><label>结束时间</label><input id="endTimeInput" class="input" value="2026-12" placeholder="支持输入：YYYY-MM" /></div>
+        <div class="field"><label>开始时间</label><input id="startTimeInput" class="input" value="2025-01-01" placeholder="支持输入：YYYY-MM-DD" /></div>
+        <div class="field"><label>结束时间</label><input id="endTimeInput" class="input" value="2026-12-31" placeholder="支持输入：YYYY-MM-DD" /></div>
         <div class="field filter-non-city"><label>国籍</label><select id="nationSelect" class="select"></select></div>
         <div class="field filter-non-city"><label>是否外籍</label><select id="foreignSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
         <div class="field filter-non-city"><label>线上/线下</label><select id="channelSelect" class="select"><option>全部</option><option>线上</option><option>线下</option></select></div>
@@ -1469,18 +1469,16 @@
       if (!startTimeInput || !endTimeInput) return;
       const start = parseAnyDate(startTimeInput.value) || buildDate(2025, 1, 1);
       const end = parseAnyDate(endTimeInput.value) || buildDate(2026, 12, 31);
+      startTimeInput.placeholder = '支持输入：YYYY-MM-DD';
+      endTimeInput.placeholder = '支持输入：YYYY-MM-DD';
       if (tabName === 'city') {
         const activeCityView = document.querySelector('.city-report-switch button.active')?.dataset.cityView || 'weekly';
         const range = cityDateRanges[activeCityView] || cityDateRanges.weekly;
-        startTimeInput.placeholder = '支持输入：YYYY-MM-DD';
-        endTimeInput.placeholder = '支持输入：YYYY-MM-DD';
         startTimeInput.value = range.start || toDayText(start);
         endTimeInput.value = range.end || toDayText(end);
       } else {
-        startTimeInput.placeholder = '支持输入：YYYY-MM';
-        endTimeInput.placeholder = '支持输入：YYYY-MM';
-        startTimeInput.value = toMonthText(start);
-        endTimeInput.value = toMonthText(end);
+        startTimeInput.value = toDayText(start);
+        endTimeInput.value = toDayText(end);
       }
     }
 
@@ -1495,8 +1493,8 @@
     }
 
     function filterPortraitRows() {
-      const startMonth = toMonthKey(startTimeInput?.value || '');
-      const endMonth = toMonthKey(endTimeInput?.value || '');
+      const startDate = parseAnyDate(startTimeInput?.value || '');
+      const endDate = parseAnyDate(endTimeInput?.value || '');
       const nation = nationSelect?.value || '全部';
       const channel = channelSelect?.value || '全部';
       const guochao = guochaoSelect?.value || '全部';
@@ -1504,10 +1502,11 @@
       const normalizeBusinessType = value => (value === '其他' ? '其它' : value);
       const selectedStores = new Set(getEffectiveStoreValues());
 
-      const isMonthMatch = monthKey => {
-        if (!monthKey) return true;
-        if (startMonth && monthKey < startMonth) return false;
-        if (endMonth && monthKey > endMonth) return false;
+      const isDateMatch = dateText => {
+        const rowDate = parseAnyDate(dateText);
+        if (!rowDate) return true;
+        if (startDate && rowDate.getTime() < startDate.getTime()) return false;
+        if (endDate && rowDate.getTime() > endDate.getTime()) return false;
         return true;
       };
 
@@ -1520,8 +1519,7 @@
       });
 
       const detailRows = detailRowSource.portrait.filter(item => {
-        const monthKey = toRowMonthKey(item.dateText);
-        if (!isMonthMatch(monthKey)) return false;
+        if (!isDateMatch(item.dateText)) return false;
         if (nation !== '全部' && item.nation !== nation) return false;
         if (!isStoreMatch(item.store)) return false;
         if (!isChannelMatch(item.channel)) return false;
@@ -1535,17 +1533,17 @@
     }
 
     function filterEntryRows() {
-      const startMonth = toMonthKey(startTimeInput?.value || '');
-      const endMonth = toMonthKey(endTimeInput?.value || '');
+      const startDate = parseAnyDate(startTimeInput?.value || '');
+      const endDate = parseAnyDate(endTimeInput?.value || '');
       const nation = nationSelect?.value || '全部';
       const channel = channelSelect?.value || '全部';
       const guochao = guochaoSelect?.value || '全部';
       const selectedStores = new Set(getEffectiveStoreValues());
 
       const rows = detailRowSource.entry.filter(item => {
-        const monthKey = toRowMonthKey(item.dateText);
-        if (monthKey && startMonth && monthKey < startMonth) return false;
-        if (monthKey && endMonth && monthKey > endMonth) return false;
+        const rowDate = parseAnyDate(item.dateText);
+        if (rowDate && startDate && rowDate.getTime() < startDate.getTime()) return false;
+        if (rowDate && endDate && rowDate.getTime() > endDate.getTime()) return false;
         if (nation !== '全部' && item.nation !== nation) return false;
         if (selectedStores.size && !selectedStores.has(item.store)) return false;
         if (channel !== '全部' && !item.channel.includes(channel)) return false;
