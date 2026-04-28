@@ -702,7 +702,7 @@
       <div class="filter-grid">
         <div class="field"><label>开始时间</label><input id="startTimeInput" class="input" value="2025-01-01" placeholder="支持输入：YYYY-MM-DD" /></div>
         <div class="field"><label>结束时间</label><input id="endTimeInput" class="input" value="2026-12-31" placeholder="支持输入：YYYY-MM-DD" /></div>
-        <div class="field filter-non-city"><label>国籍</label><select id="nationSelect" class="select"></select></div>
+        <div class="field filter-non-city"><label>国籍</label><div id="nationSelectWrap" class="multi-select"><button id="nationSelectBtn" type="button" class="multi-select-btn" aria-expanded="false">全部</button><div id="nationSelectPanel" class="multi-select-panel"></div></div><select id="nationSelect" class="select" multiple size="6" hidden></select></div>
         <div class="field filter-non-city"><label>是否外籍</label><select id="foreignSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
         <div class="field filter-non-city"><label>线上/线下</label><select id="channelSelect" class="select"><option>全部</option><option>线上</option><option>线下</option></select></div>
         <div class="field filter-non-city"><label>是否国潮品牌</label><select id="guochaoSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
@@ -853,22 +853,22 @@
             <table>
               <thead>
                 <tr>
-                  <th>序号</th><th>年月</th><th>国籍</th><th>门店</th><th>线上/线下</th><th>品类</th><th>品牌</th><th>是否国潮产品</th><th>业务类型</th><th>性别</th><th>年龄段</th><th>销售额(万元)</th>
+                  <th>序号</th><th>年月</th><th>国籍</th><th>门店</th><th>线上/线下</th><th>品类</th><th>品牌</th><th>是否国潮产品</th><th>业务类型</th><th>性别</th><th>年龄段</th><th>销售额(万元)</th><th>其中，国产品退税</th><th>离境退税</th>
                 </tr>
               </thead>
               <tbody id="portraitDetailBody">
-                <tr><td>1</td><td>2025-01</td><td>中国大陆</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>进口烟</td><td>万宝路</td><td><span class="tag tag-yes">是</span></td><td>有税</td><td>男</td><td>16—19</td><td>18.24</td></tr>
-                <tr><td>2</td><td>2025-01</td><td>香港</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>进口酒</td><td>轩尼诗</td><td><span class="tag tag-yes">是</span></td><td>免税</td><td>男</td><td>20-23</td><td>36.62</td></tr>
-                <tr><td>3</td><td>2025-01</td><td>澳门</td><td>[6852]中免集团昆明机场免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>进口酒</td><td>轩尼诗</td><td><span class="tag tag-no">否</span></td><td>免税</td><td>女</td><td>24-28</td><td>44.38</td></tr>
-                <tr><td>4</td><td>2025-01</td><td>台湾</td><td>[6852]中免集团昆明机场免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>国产烟</td><td>中华</td><td><span class="tag tag-yes">是</span></td><td>其它</td><td>女</td><td>29-33</td><td>13.28</td></tr>
-                <tr><td>5</td><td>2025-01</td><td>美国</td><td>[6764]湖南中免免税品有限责任公司</td><td><span class="tag tag-online">线下</span></td><td>香化</td><td>兰蔻</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>女</td><td>34-40</td><td>27.16</td></tr>
-                <tr><td>6</td><td>2025-01</td><td>法国</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>箱包</td><td>LV</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>41-45</td><td>39.82</td></tr>
-                <tr><td>7</td><td>2025-01</td><td>新加坡</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>腕表</td><td>欧米茄</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>46-50</td><td>25.08</td></tr>
-                <tr><td>8</td><td>2025-01</td><td>阿联酋</td><td>[6853]上海港中免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>珠宝</td><td>卡地亚</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>女</td><td>50以上</td><td>52.44</td></tr>
-                <tr><td>9</td><td>2025-02</td><td>中国大陆</td><td>[6853]上海港中免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>美妆</td><td>雅诗兰黛</td><td><span class="tag tag-yes">是</span></td><td>免税</td><td>女</td><td>24-28</td><td>41.76</td></tr>
-                <tr><td>10</td><td>2025-02</td><td>日本</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>箱包</td><td>COACH</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>男</td><td>29-33</td><td>22.35</td></tr>
-                <tr><td>11</td><td>2025-03</td><td>韩国</td><td>[6764]湖南中免免税品有限责任公司</td><td><span class="tag tag-online">线下</span></td><td>腕表</td><td>天梭</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>34-40</td><td>18.92</td></tr>
-                <tr><td>12</td><td>2025-03</td><td>新加坡</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>食品</td><td>歌帝梵</td><td><span class="tag tag-yes">是</span></td><td>其它</td><td>女</td><td>41-45</td><td>12.68</td></tr>
+                <tr><td>1</td><td>2025-01</td><td>中国大陆</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>进口烟</td><td>万宝路</td><td><span class="tag tag-yes">是</span></td><td>有税</td><td>男</td><td>16—19</td><td>18.24</td><td>1.82</td><td>0.00</td></tr>
+                <tr><td>2</td><td>2025-01</td><td>香港</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>进口酒</td><td>轩尼诗</td><td><span class="tag tag-yes">是</span></td><td>免税</td><td>男</td><td>20-23</td><td>36.62</td><td>0.00</td><td>0.00</td></tr>
+                <tr><td>3</td><td>2025-01</td><td>澳门</td><td>[6852]中免集团昆明机场免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>进口酒</td><td>轩尼诗</td><td><span class="tag tag-no">否</span></td><td>免税</td><td>女</td><td>24-28</td><td>44.38</td><td>0.00</td><td>0.00</td></tr>
+                <tr><td>4</td><td>2025-01</td><td>台湾</td><td>[6852]中免集团昆明机场免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>国产烟</td><td>中华</td><td><span class="tag tag-yes">是</span></td><td>其它</td><td>女</td><td>29-33</td><td>13.28</td><td>2.64</td><td>1.18</td></tr>
+                <tr><td>5</td><td>2025-01</td><td>美国</td><td>[6764]湖南中免免税品有限责任公司</td><td><span class="tag tag-online">线下</span></td><td>香化</td><td>兰蔻</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>女</td><td>34-40</td><td>27.16</td><td>0.00</td><td>0.00</td></tr>
+                <tr><td>6</td><td>2025-01</td><td>法国</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>箱包</td><td>LV</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>41-45</td><td>39.82</td><td>0.00</td><td>39.82</td></tr>
+                <tr><td>7</td><td>2025-01</td><td>新加坡</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>腕表</td><td>欧米茄</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>46-50</td><td>25.08</td><td>0.00</td><td>25.08</td></tr>
+                <tr><td>8</td><td>2025-01</td><td>阿联酋</td><td>[6853]上海港中免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>珠宝</td><td>卡地亚</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>女</td><td>50以上</td><td>52.44</td><td>0.00</td><td>0.00</td></tr>
+                <tr><td>9</td><td>2025-02</td><td>中国大陆</td><td>[6853]上海港中免免税品有限公司</td><td><span class="tag tag-online">线下</span></td><td>美妆</td><td>雅诗兰黛</td><td><span class="tag tag-yes">是</span></td><td>免税</td><td>女</td><td>24-28</td><td>41.76</td><td>0.00</td><td>0.00</td></tr>
+                <tr><td>10</td><td>2025-02</td><td>日本</td><td>[6826]广州新免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>箱包</td><td>COACH</td><td><span class="tag tag-no">否</span></td><td>有税</td><td>男</td><td>29-33</td><td>22.35</td><td>0.00</td><td>0.00</td></tr>
+                <tr><td>11</td><td>2025-03</td><td>韩国</td><td>[6764]湖南中免免税品有限责任公司</td><td><span class="tag tag-online">线下</span></td><td>腕表</td><td>天梭</td><td><span class="tag tag-no">否</span></td><td>离境退税</td><td>男</td><td>34-40</td><td>18.92</td><td>0.00</td><td>18.92</td></tr>
+                <tr><td>12</td><td>2025-03</td><td>新加坡</td><td>[6791]厦门东免免税品有限公司</td><td><span class="tag tag-online">线上</span></td><td>食品</td><td>歌帝梵</td><td><span class="tag tag-yes">是</span></td><td>其它</td><td>女</td><td>41-45</td><td>12.68</td><td>1.26</td><td>0.84</td></tr>
               </tbody>
             </table>
           </div>
@@ -1217,6 +1217,9 @@
     const foreignNations = ['美国', '日本', '韩国', '法国', '德国', '英国', '加拿大', '澳大利亚', '新加坡', '阿联酋', '泰国', '马来西亚', '印度', '巴西', '南非'];
 
     const nationSelect = document.getElementById('nationSelect');
+    const nationSelectWrap = document.getElementById('nationSelectWrap');
+    const nationSelectBtn = document.getElementById('nationSelectBtn');
+    const nationSelectPanel = document.getElementById('nationSelectPanel');
     const foreignSelect = document.getElementById('foreignSelect');
     const channelSelect = document.getElementById('channelSelect');
     const guochaoSelect = document.getElementById('guochaoSelect');
@@ -1234,29 +1237,131 @@
     const cityWeeklyBody = document.getElementById('cityWeeklyBody');
     const cityMonthlyBody = document.getElementById('cityMonthlyBody');
 
-    function setNationOptions(list, keepValue) {
-      nationSelect.innerHTML = '';
-      const all = document.createElement('option');
-      all.value = '全部';
-      all.textContent = '全部';
-      nationSelect.appendChild(all);
+    function getSelectedNationValues() {
+      if (!nationSelect) return [];
+      return Array.from(nationSelect.selectedOptions).map(opt => opt.value);
+    }
 
-      list.forEach(item => {
-        const option = document.createElement('option');
-        option.value = item;
-        option.textContent = item;
-        nationSelect.appendChild(option);
-      });
+    function normalizeNationSelection() {
+      if (!nationSelect) return;
+      const selectedValues = getSelectedNationValues();
+      if (!selectedValues.length) {
+        Array.from(nationSelect.options).forEach(opt => {
+          opt.selected = opt.value === '全部';
+        });
+        return;
+      }
 
-      if (keepValue && Array.from(nationSelect.options).some(opt => opt.value === keepValue)) {
-        nationSelect.value = keepValue;
-      } else {
-        nationSelect.value = '全部';
+      if (selectedValues.includes('全部') && selectedValues.length > 1) {
+        Array.from(nationSelect.options).forEach(opt => {
+          opt.selected = opt.value !== '全部';
+        });
       }
     }
 
+    function getEffectiveNationValues() {
+      const selectedValues = getSelectedNationValues();
+      if (!selectedValues.length || selectedValues.includes('全部')) return [];
+      return selectedValues;
+    }
+
+    function updateNationButtonText() {
+      if (!nationSelectBtn || !nationSelect) return;
+      const selected = Array.from(nationSelect.options).filter(opt => opt.selected);
+      if (!selected.length || selected.some(opt => opt.value === '全部')) {
+        nationSelectBtn.textContent = '全部';
+        return;
+      }
+      const labels = selected.map(opt => opt.textContent.trim());
+      nationSelectBtn.textContent = labels.length <= 2 ? labels.join('、') : `已选${labels.length}项`;
+    }
+
+    function setNationDropdownOpen(open) {
+      if (!nationSelectWrap || !nationSelectBtn) return;
+      nationSelectWrap.classList.toggle('open', open);
+      nationSelectBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+
+    function renderNationPanelOptions() {
+      if (!nationSelectPanel || !nationSelect) return;
+      nationSelectPanel.innerHTML = '';
+      Array.from(nationSelect.options).forEach(opt => {
+        const label = document.createElement('label');
+        label.className = 'multi-select-option';
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.value = opt.value;
+        checkbox.checked = opt.selected;
+
+        const text = document.createElement('span');
+        text.textContent = opt.textContent;
+
+        label.appendChild(checkbox);
+        label.appendChild(text);
+        nationSelectPanel.appendChild(label);
+      });
+    }
+
+    function applyNationPanelSelection() {
+      if (!nationSelectPanel || !nationSelect) return;
+      const checkedValues = Array.from(nationSelectPanel.querySelectorAll('input[type="checkbox"]'))
+        .filter(input => input.checked)
+        .map(input => input.value);
+      Array.from(nationSelect.options).forEach(opt => {
+        opt.selected = checkedValues.includes(opt.value);
+      });
+      normalizeNationSelection();
+      renderNationPanelOptions();
+      updateNationButtonText();
+      nationSelect.dispatchEvent(new Event('change'));
+    }
+
+    function initNationMultiSelect() {
+      if (!nationSelectWrap || !nationSelectBtn || !nationSelectPanel || !nationSelect) return;
+      renderNationPanelOptions();
+      updateNationButtonText();
+
+      nationSelectBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        setNationDropdownOpen(!nationSelectWrap.classList.contains('open'));
+      });
+
+      nationSelectPanel.addEventListener('click', e => {
+        e.stopPropagation();
+      });
+
+      nationSelectPanel.addEventListener('change', e => {
+        if (e.target && e.target.matches('input[type="checkbox"]')) {
+          applyNationPanelSelection();
+        }
+      });
+
+      document.addEventListener('click', e => {
+        if (!nationSelectWrap.contains(e.target)) {
+          setNationDropdownOpen(false);
+        }
+      });
+    }
+
+    function setNationOptions(list, keepValues = []) {
+      nationSelect.innerHTML = '';
+      const source = ['全部', ...list];
+      nationSelect.innerHTML = source.map(item => `<option value="${item}">${item}</option>`).join('');
+
+      const recover = keepValues.filter(value => source.includes(value));
+      const selected = recover.length ? recover : ['全部'];
+      Array.from(nationSelect.options).forEach(opt => {
+        opt.selected = selected.includes(opt.value);
+      });
+      normalizeNationSelection();
+      renderNationPanelOptions();
+      updateNationButtonText();
+      setNationDropdownOpen(false);
+    }
+
     function applyForeignToNation() {
-      const previous = nationSelect.value;
+      const previous = getSelectedNationValues();
       if (foreignSelect.value === '否') {
         setNationOptions(chineseNations, previous);
       } else if (foreignSelect.value === '是') {
@@ -1268,9 +1373,17 @@
     }
 
     function applyNationToForeign() {
-      const nation = nationSelect.value;
-      if (nation === '全部') return;
-      foreignSelect.value = chineseNations.includes(nation) ? '否' : '是';
+      const nations = getEffectiveNationValues();
+      if (!nations.length) return;
+      const hasChinese = nations.some(nation => chineseNations.includes(nation));
+      const hasForeign = nations.some(nation => foreignNations.includes(nation));
+      if (hasChinese && hasForeign) {
+        foreignSelect.value = '全部';
+      } else if (hasForeign) {
+        foreignSelect.value = '是';
+      } else if (hasChinese) {
+        foreignSelect.value = '否';
+      }
       applyPortraitForeignColumnMode();
     }
 
@@ -1282,6 +1395,9 @@
     }
     if (nationSelect) {
       nationSelect.addEventListener('change', () => {
+        normalizeNationSelection();
+        renderNationPanelOptions();
+        updateNationButtonText();
         applyNationToForeign();
         applyCurrentTabFilters();
       });
@@ -1601,7 +1717,7 @@
     function filterPortraitRows() {
       const startDate = parseAnyDate(startTimeInput?.value || '');
       const endDate = parseAnyDate(endTimeInput?.value || '');
-      const nation = nationSelect?.value || '全部';
+      const nations = new Set(getEffectiveNationValues());
       const channel = channelSelect?.value || '全部';
       const guochao = guochaoSelect?.value || '全部';
       const businessType = businessTypeSelect?.value || '全部';
@@ -1620,13 +1736,13 @@
       const isChannelMatch = text => channel === '全部' || text.includes(channel);
 
       const summaryRows = summaryRowSource.filter(item => {
-        if (nation !== '全部' && item.nation !== nation) return false;
+        if (nations.size && !nations.has(item.nation)) return false;
         return isStoreMatch(item.store) && isChannelMatch(item.channel);
       });
 
       const detailRows = detailRowSource.portrait.filter(item => {
         if (!isDateMatch(item.dateText)) return false;
-        if (nation !== '全部' && item.nation !== nation) return false;
+        if (nations.size && !nations.has(item.nation)) return false;
         if (!isStoreMatch(item.store)) return false;
         if (!isChannelMatch(item.channel)) return false;
         if (guochao !== '全部' && item.guochao !== guochao) return false;
@@ -1641,7 +1757,7 @@
     function filterEntryRows() {
       const startDate = parseAnyDate(startTimeInput?.value || '');
       const endDate = parseAnyDate(endTimeInput?.value || '');
-      const nation = nationSelect?.value || '全部';
+      const nations = new Set(getEffectiveNationValues());
       const channel = channelSelect?.value || '全部';
       const guochao = guochaoSelect?.value || '全部';
       const selectedStores = new Set(getEffectiveStoreValues());
@@ -1650,7 +1766,7 @@
         const rowDate = parseAnyDate(item.dateText);
         if (rowDate && startDate && rowDate.getTime() < startDate.getTime()) return false;
         if (rowDate && endDate && rowDate.getTime() > endDate.getTime()) return false;
-        if (nation !== '全部' && item.nation !== nation) return false;
+        if (nations.size && !nations.has(item.nation)) return false;
         if (selectedStores.size && !selectedStores.has(item.store)) return false;
         if (channel !== '全部' && !item.channel.includes(channel)) return false;
         if (guochao !== '全部') {
@@ -1873,6 +1989,7 @@
 
     setNationOptions([...chineseNations, ...foreignNations]);
     setStoreOptionsByTab('portrait');
+    initNationMultiSelect();
     initStoreMultiSelect();
     setDateInputsByTab('portrait');
     setCityView('weekly');
