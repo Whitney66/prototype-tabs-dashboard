@@ -739,6 +739,20 @@
                   <button class="toggle-btn" data-value="no">否</button>
                 </span>
               </span>
+              <span class="toggle-control" data-target-col="domesticTaxRefund">
+                是否展示国产品退税：
+                <span class="toggle-group">
+                  <button class="toggle-btn" data-value="yes">是</button>
+                  <button class="toggle-btn active" data-value="no">否</button>
+                </span>
+              </span>
+              <span class="toggle-control" data-target-col="departureTaxRefund">
+                是否展示离境退税：
+                <span class="toggle-group">
+                  <button class="toggle-btn" data-value="yes">是</button>
+                  <button class="toggle-btn active" data-value="no">否</button>
+                </span>
+              </span>
             </div>
           </div>
           <div class="table-wrap">
@@ -748,32 +762,36 @@
                   <th rowspan="2">门店</th>
                   <th rowspan="2" class="col-channel">线上/线下</th>
                   <th rowspan="2" class="col-nation">国籍</th>
-                  <th colspan="5" class="th-group-yellow col-store">门店总体销售情况年累计</th>
-                  <th colspan="5" class="th-group-purple col-store">门店总体销售情况月累计</th>
-                  <th colspan="5" class="th-group-blue col-foreign">外籍人员消费情况年累计</th>
-                  <th colspan="5" class="th-group-green col-foreign">外籍人员消费情况月累计</th>
+                  <th colspan="6" class="th-group-yellow col-store">门店总体销售情况年累计</th>
+                  <th colspan="6" class="th-group-purple col-store">门店总体销售情况月累计</th>
+                  <th colspan="6" class="th-group-blue col-foreign">外籍人员消费情况年累计</th>
+                  <th colspan="6" class="th-group-green col-foreign">外籍人员消费情况月累计</th>
                 </tr>
                 <tr>
-                  <th class="th-group-yellow col-store">线下有税（不含离境退税）</th>
-                  <th class="th-group-yellow col-store">离境退税</th>
+                  <th class="th-group-yellow col-store">销售额（万元）</th>
+                  <th class="th-group-yellow col-store col-domestic-tax-refund">其中，国产品退税</th>
+                  <th class="th-group-yellow col-store col-departure-tax-refund">离境退税</th>
                   <th class="th-group-yellow col-store">国潮销售额（万元）</th>
                   <th class="th-group-yellow col-store">购物人数</th>
                   <th class="th-group-yellow col-store">国潮购物人数</th>
 
-                  <th class="th-group-purple col-store">线下有税（不含离境退税）</th>
-                  <th class="th-group-purple col-store">离境退税</th>
+                  <th class="th-group-purple col-store">销售额（万元）</th>
+                  <th class="th-group-purple col-store col-domestic-tax-refund">其中，国产品退税</th>
+                  <th class="th-group-purple col-store col-departure-tax-refund">离境退税</th>
                   <th class="th-group-purple col-store">国潮销售额（万元）</th>
                   <th class="th-group-purple col-store">购物人数</th>
                   <th class="th-group-purple col-store">国潮购物人数</th>
 
-                  <th class="th-group-blue col-foreign">线下有税（不含离境退税）</th>
-                  <th class="th-group-blue col-foreign">离境退税</th>
+                  <th class="th-group-blue col-foreign">销售额（万元）</th>
+                  <th class="th-group-blue col-foreign col-domestic-tax-refund">其中，国产品退税</th>
+                  <th class="th-group-blue col-foreign col-departure-tax-refund">离境退税</th>
                   <th class="th-group-blue col-foreign">国潮销售额（万元）</th>
                   <th class="th-group-blue col-foreign">购物人数</th>
                   <th class="th-group-blue col-foreign">国潮购物人数</th>
 
-                  <th class="th-group-green col-foreign">线下有税（不含离境退税）</th>
-                  <th class="th-group-green col-foreign">离境退税</th>
+                  <th class="th-group-green col-foreign">销售额（万元）</th>
+                  <th class="th-group-green col-foreign col-domestic-tax-refund">其中，国产品退税</th>
+                  <th class="th-group-green col-foreign col-departure-tax-refund">离境退税</th>
                   <th class="th-group-green col-foreign">国潮销售额（万元）</th>
                   <th class="th-group-green col-foreign">购物人数</th>
                   <th class="th-group-green col-foreign">国潮购物人数</th>
@@ -784,55 +802,55 @@
                   <td>[6826]广州新免免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线下</span></td>
                   <td class="col-nation">中国大陆</td>
-                  <td class="col-store">282.40</td><td class="col-store">28.10</td><td class="col-store">180.20</td><td class="col-store">8450</td><td class="col-store">3920</td>
-                  <td class="col-store">24.60</td><td class="col-store">2.20</td><td class="col-store">15.60</td><td class="col-store">2010</td><td class="col-store">910</td>
-                  <td class="col-foreign">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0</td><td class="col-foreign">0</td>
-                  <td class="col-foreign">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0</td><td class="col-foreign">0</td>
+                  <td class="col-store">282.40</td><td class="col-store col-domestic-tax-refund">12.80</td><td class="col-store col-departure-tax-refund">28.10</td><td class="col-store">180.20</td><td class="col-store">8450</td><td class="col-store">3920</td>
+                  <td class="col-store">24.60</td><td class="col-store col-domestic-tax-refund">1.10</td><td class="col-store col-departure-tax-refund">2.20</td><td class="col-store">15.60</td><td class="col-store">2010</td><td class="col-store">910</td>
+                  <td class="col-foreign">0.00</td><td class="col-foreign col-domestic-tax-refund">0.00</td><td class="col-foreign col-departure-tax-refund">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0</td><td class="col-foreign">0</td>
+                  <td class="col-foreign">0.00</td><td class="col-foreign col-domestic-tax-refund">0.00</td><td class="col-foreign col-departure-tax-refund">0.00</td><td class="col-foreign">0.00</td><td class="col-foreign">0</td><td class="col-foreign">0</td>
                 </tr>
                 <tr>
                   <td>[6826]广州新免免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线上</span></td>
                   <td class="col-nation">香港</td>
-                  <td class="col-store">388.30</td><td class="col-store">29.47</td><td class="col-store">220.31</td><td class="col-store">9276</td><td class="col-store">4670</td>
-                  <td class="col-store">31.12</td><td class="col-store">3.28</td><td class="col-store">16.99</td><td class="col-store">2527</td><td class="col-store">1291</td>
-                  <td class="col-foreign">39.40</td><td class="col-foreign">6.84</td><td class="col-foreign">46.24</td><td class="col-foreign">883</td><td class="col-foreign">883</td>
-                  <td class="col-foreign">3.96</td><td class="col-foreign">0.62</td><td class="col-foreign">5.14</td><td class="col-foreign">96</td><td class="col-foreign">96</td>
+                  <td class="col-store">388.30</td><td class="col-store col-domestic-tax-refund">18.45</td><td class="col-store col-departure-tax-refund">29.47</td><td class="col-store">220.31</td><td class="col-store">9276</td><td class="col-store">4670</td>
+                  <td class="col-store">31.12</td><td class="col-store col-domestic-tax-refund">1.86</td><td class="col-store col-departure-tax-refund">3.28</td><td class="col-store">16.99</td><td class="col-store">2527</td><td class="col-store">1291</td>
+                  <td class="col-foreign">39.40</td><td class="col-foreign col-domestic-tax-refund">3.60</td><td class="col-foreign col-departure-tax-refund">6.84</td><td class="col-foreign">46.24</td><td class="col-foreign">883</td><td class="col-foreign">883</td>
+                  <td class="col-foreign">3.96</td><td class="col-foreign col-domestic-tax-refund">0.38</td><td class="col-foreign col-departure-tax-refund">0.62</td><td class="col-foreign">5.14</td><td class="col-foreign">96</td><td class="col-foreign">96</td>
                 </tr>
                 <tr>
                   <td>[6852]中免集团昆明机场免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线下</span></td>
                   <td class="col-nation">澳门</td>
-                  <td class="col-store">330.83</td><td class="col-store">36.76</td><td class="col-store">245.92</td><td class="col-store">9875</td><td class="col-store">6549</td>
-                  <td class="col-store">38.12</td><td class="col-store">4.74</td><td class="col-store">42.86</td><td class="col-store">1573</td><td class="col-store">1573</td>
-                  <td class="col-foreign">42.50</td><td class="col-foreign">1.88</td><td class="col-foreign">13.28</td><td class="col-foreign">920</td><td class="col-foreign">920</td>
-                  <td class="col-foreign">4.22</td><td class="col-foreign">0.21</td><td class="col-foreign">1.58</td><td class="col-foreign">108</td><td class="col-foreign">108</td>
+                  <td class="col-store">330.83</td><td class="col-store col-domestic-tax-refund">15.72</td><td class="col-store col-departure-tax-refund">36.76</td><td class="col-store">245.92</td><td class="col-store">9875</td><td class="col-store">6549</td>
+                  <td class="col-store">38.12</td><td class="col-store col-domestic-tax-refund">2.45</td><td class="col-store col-departure-tax-refund">4.74</td><td class="col-store">42.86</td><td class="col-store">1573</td><td class="col-store">1573</td>
+                  <td class="col-foreign">42.50</td><td class="col-foreign col-domestic-tax-refund">2.74</td><td class="col-foreign col-departure-tax-refund">1.88</td><td class="col-foreign">13.28</td><td class="col-foreign">920</td><td class="col-foreign">920</td>
+                  <td class="col-foreign">4.22</td><td class="col-foreign col-domestic-tax-refund">0.31</td><td class="col-foreign col-departure-tax-refund">0.21</td><td class="col-foreign">1.58</td><td class="col-foreign">108</td><td class="col-foreign">108</td>
                 </tr>
                 <tr>
                   <td>[6853]上海港中免免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线上</span></td>
                   <td class="col-nation">台湾</td>
-                  <td class="col-store">302.20</td><td class="col-store">24.15</td><td class="col-store">326.35</td><td class="col-store">10731</td><td class="col-store">10731</td>
-                  <td class="col-store">32.44</td><td class="col-store">3.20</td><td class="col-store">35.64</td><td class="col-store">1623</td><td class="col-store">1623</td>
-                  <td class="col-foreign">36.01</td><td class="col-foreign">4.01</td><td class="col-foreign">40.02</td><td class="col-foreign">966</td><td class="col-foreign">966</td>
-                  <td class="col-foreign">3.74</td><td class="col-foreign">0.43</td><td class="col-foreign">4.86</td><td class="col-foreign">114</td><td class="col-foreign">114</td>
+                  <td class="col-store">302.20</td><td class="col-store col-domestic-tax-refund">14.38</td><td class="col-store col-departure-tax-refund">24.15</td><td class="col-store">326.35</td><td class="col-store">10731</td><td class="col-store">10731</td>
+                  <td class="col-store">32.44</td><td class="col-store col-domestic-tax-refund">1.92</td><td class="col-store col-departure-tax-refund">3.20</td><td class="col-store">35.64</td><td class="col-store">1623</td><td class="col-store">1623</td>
+                  <td class="col-foreign">36.01</td><td class="col-foreign col-domestic-tax-refund">2.63</td><td class="col-foreign col-departure-tax-refund">4.01</td><td class="col-foreign">40.02</td><td class="col-foreign">966</td><td class="col-foreign">966</td>
+                  <td class="col-foreign">3.74</td><td class="col-foreign col-domestic-tax-refund">0.29</td><td class="col-foreign col-departure-tax-refund">0.43</td><td class="col-foreign">4.86</td><td class="col-foreign">114</td><td class="col-foreign">114</td>
                 </tr>
                 <tr>
                   <td>[6764]湖南中免免税品有限责任公司</td>
                   <td class="col-channel"><span class="tag tag-online">线下</span></td>
                   <td class="col-nation">美国</td>
-                  <td class="col-store">286.94</td><td class="col-store">31.89</td><td class="col-store">268.69</td><td class="col-store">12323</td><td class="col-store">8918</td>
-                  <td class="col-store">40.88</td><td class="col-store">3.07</td><td class="col-store">43.95</td><td class="col-store">1644</td><td class="col-store">1644</td>
-                  <td class="col-foreign">28.71</td><td class="col-foreign">5.06</td><td class="col-foreign">33.77</td><td class="col-foreign">812</td><td class="col-foreign">812</td>
-                  <td class="col-foreign">2.93</td><td class="col-foreign">0.58</td><td class="col-foreign">3.36</td><td class="col-foreign">88</td><td class="col-foreign">88</td>
+                  <td class="col-store">286.94</td><td class="col-store col-domestic-tax-refund">13.67</td><td class="col-store col-departure-tax-refund">31.89</td><td class="col-store">268.69</td><td class="col-store">12323</td><td class="col-store">8918</td>
+                  <td class="col-store">40.88</td><td class="col-store col-domestic-tax-refund">2.57</td><td class="col-store col-departure-tax-refund">3.07</td><td class="col-store">43.95</td><td class="col-store">1644</td><td class="col-store">1644</td>
+                  <td class="col-foreign">28.71</td><td class="col-foreign col-domestic-tax-refund">2.14</td><td class="col-foreign col-departure-tax-refund">5.06</td><td class="col-foreign">33.77</td><td class="col-foreign">812</td><td class="col-foreign">812</td>
+                  <td class="col-foreign">2.93</td><td class="col-foreign col-domestic-tax-refund">0.24</td><td class="col-foreign col-departure-tax-refund">0.58</td><td class="col-foreign">3.36</td><td class="col-foreign">88</td><td class="col-foreign">88</td>
                 </tr>
                 <tr>
                   <td>[6791]厦门东免免税品有限公司</td>
                   <td class="col-channel"><span class="tag tag-online">线下</span></td>
                   <td class="col-nation">日本</td>
-                  <td class="col-store">273.40</td><td class="col-store">29.63</td><td class="col-store">64.52</td><td class="col-store">8406</td><td class="col-store">1885</td>
-                  <td class="col-store">37.11</td><td class="col-store">3.12</td><td class="col-store">20.86</td><td class="col-store">1248</td><td class="col-store">784</td>
-                  <td class="col-foreign">31.77</td><td class="col-foreign">11.54</td><td class="col-foreign">0.00</td><td class="col-foreign">691</td><td class="col-foreign">0</td>
-                  <td class="col-foreign">3.18</td><td class="col-foreign">1.26</td><td class="col-foreign">0.00</td><td class="col-foreign">73</td><td class="col-foreign">0</td>
+                  <td class="col-store">273.40</td><td class="col-store col-domestic-tax-refund">0.00</td><td class="col-store col-departure-tax-refund">29.63</td><td class="col-store">64.52</td><td class="col-store">8406</td><td class="col-store">1885</td>
+                  <td class="col-store">37.11</td><td class="col-store col-domestic-tax-refund">0.00</td><td class="col-store col-departure-tax-refund">3.12</td><td class="col-store">20.86</td><td class="col-store">1248</td><td class="col-store">784</td>
+                  <td class="col-foreign">31.77</td><td class="col-foreign col-domestic-tax-refund">0.00</td><td class="col-foreign col-departure-tax-refund">11.54</td><td class="col-foreign">0.00</td><td class="col-foreign">691</td><td class="col-foreign">0</td>
+                  <td class="col-foreign">3.18</td><td class="col-foreign col-domestic-tax-refund">0.00</td><td class="col-foreign col-departure-tax-refund">1.26</td><td class="col-foreign">0.00</td><td class="col-foreign">73</td><td class="col-foreign">0</td>
                 </tr>
               </tbody>
             </table>
@@ -1780,22 +1798,35 @@
       renderRows(entryDetailBody, rows);
     }
 
-    function applyPortraitForeignColumnMode() {
-      const mode = foreignSelect?.value || '全部';
-      const showStoreCols = mode !== '是';
-      const showForeignCols = mode !== '否';
-      document.querySelectorAll('.col-store').forEach(el => {
-        el.classList.toggle('hidden-col', !showStoreCols);
+    function applyPortraitColumnVisibility() {
+      const foreignMode = foreignSelect?.value || '全部';
+      const showStoreCols = foreignMode !== '是';
+      const showForeignCols = foreignMode !== '否';
+
+      document.querySelectorAll('#fig1 .col-channel').forEach(el => {
+        el.classList.toggle('hidden-col', !columnState.channel);
       });
-      document.querySelectorAll('.col-foreign').forEach(el => {
-        el.classList.toggle('hidden-col', !showForeignCols);
+      document.querySelectorAll('#fig1 .col-nation').forEach(el => {
+        el.classList.toggle('hidden-col', !columnState.nation);
+      });
+      document.querySelectorAll('#fig1 .col-store, #fig1 .col-foreign').forEach(el => {
+        const inStoreGroup = el.classList.contains('col-store');
+        const inForeignGroup = el.classList.contains('col-foreign');
+        let visible = true;
+
+        if (inStoreGroup) visible = visible && showStoreCols;
+        if (inForeignGroup) visible = visible && showForeignCols;
+        if (el.classList.contains('col-domestic-tax-refund')) visible = visible && columnState.domesticTaxRefund;
+        if (el.classList.contains('col-departure-tax-refund')) visible = visible && columnState.departureTaxRefund;
+
+        el.classList.toggle('hidden-col', !visible);
       });
     }
 
     function applyCurrentTabFilters() {
       const activeTab = document.querySelector('.tab.active')?.dataset.tab || 'portrait';
       if (activeTab === 'portrait') {
-        applyPortraitForeignColumnMode();
+        applyPortraitColumnVisibility();
         filterPortraitRows();
       } else if (activeTab === 'entry') {
         filterEntryRows();
@@ -1919,15 +1950,10 @@
       applyCurrentTabFilters();
     }
 
-    const columnState = { channel: true, nation: true };
+    const columnState = { channel: true, nation: true, domesticTaxRefund: false, departureTaxRefund: false };
 
     function applyColumnVisibility() {
-      document.querySelectorAll('.col-channel').forEach(el => {
-        el.classList.toggle('hidden-col', !columnState.channel);
-      });
-      document.querySelectorAll('.col-nation').forEach(el => {
-        el.classList.toggle('hidden-col', !columnState.nation);
-      });
+      applyPortraitColumnVisibility();
     }
 
     document.querySelectorAll('.toggle-control').forEach(control => {
