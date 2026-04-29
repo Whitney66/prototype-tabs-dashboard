@@ -700,6 +700,15 @@
 
     <section class="card filter">
       <div class="filter-grid">
+        <div class="field">
+          <label>时间维度</label>
+          <span class="toggle-control time-granularity-control">
+            <span class="toggle-group">
+              <button type="button" class="toggle-btn" data-date-granularity="month">月</button>
+              <button type="button" class="toggle-btn active" data-date-granularity="day">日</button>
+            </span>
+          </span>
+        </div>
         <div class="field"><label>开始时间</label><input id="startTimeInput" class="input" value="2025-01-01" placeholder="支持输入：YYYY-MM-DD" /></div>
         <div class="field"><label>结束时间</label><input id="endTimeInput" class="input" value="2026-12-31" placeholder="支持输入：YYYY-MM-DD" /></div>
         <div class="field filter-non-city"><label>国籍</label><div id="nationSelectWrap" class="multi-select"><button id="nationSelectBtn" type="button" class="multi-select-btn" aria-expanded="false">全部</button><div id="nationSelectPanel" class="multi-select-panel"></div></div><select id="nationSelect" class="select" multiple size="6" hidden></select></div>
@@ -707,7 +716,7 @@
         <div class="field filter-non-city"><label>线上/线下</label><select id="channelSelect" class="select"><option>全部</option><option>线上</option><option>线下</option></select></div>
         <div class="field filter-non-city"><label>是否国潮品牌</label><select id="guochaoSelect" class="select"><option>全部</option><option>是</option><option>否</option></select></div>
         <div class="field"><label>门店</label><div id="storeSelectWrap" class="multi-select"><button id="storeSelectBtn" type="button" class="multi-select-btn" aria-expanded="false">全部</button><div id="storeSelectPanel" class="multi-select-panel"></div></div><select id="storeSelect" class="select" multiple size="4" hidden><option value="全部" selected>全部</option><option value="[6826]广州新免免税品有限公司">[6826]广州新免免税品有限公司</option><option value="[6852]中免集团昆明机场免税品有限公司">[6852]中免集团昆明机场免税品有限公司</option><option value="[6853]上海港中免免税品有限公司">[6853]上海港中免免税品有限公司</option><option value="[6764]湖南中免免税品有限责任公司">[6764]湖南中免免税品有限责任公司</option><option value="[6791]厦门东免免税品有限公司">[6791]厦门东免免税品有限公司</option></select></div>
-        <div class="field filter-portrait-only"><label>业务类型</label><select id="businessTypeSelect" class="select"><option>全部</option><option>有税</option><option>免税</option><option>国产品退税</option><option>离境退税</option><option>其它</option></select></div>
+        <div class="field filter-portrait-only"><label>业务类型</label><select id="businessTypeSelect" class="select"><option>全部</option><option>有税</option><option>免税</option><option>其它（退税）</option></select></div>
         <div class="actions"><button id="queryBtn" class="btn-primary">查询</button></div>
       </div>
     </section>
@@ -1249,6 +1258,7 @@
     const queryBtn = document.getElementById('queryBtn');
     const startTimeInput = document.getElementById('startTimeInput');
     const endTimeInput = document.getElementById('endTimeInput');
+    const dateGranularityBtns = document.querySelectorAll('[data-date-granularity]');
     const portraitSummaryBody = document.querySelector('#fig1 tbody');
     const portraitDetailBody = document.getElementById('portraitDetailBody');
     const entryDetailBody = document.getElementById('entryDetailBody');
@@ -1483,6 +1493,24 @@
       ['342.56','210.78','46.00','256.78','62.34','48.92','9.23','4.19','24.1','42.56','9.23','56','51.79','15.67','2.06','8.73','0.88','11.24','1.53','12.74','13.16','14.21','91.90']
     ];
 
+    const dateGranularityState = {
+      portrait: 'day',
+      entry: 'day'
+    };
+
+    const tabDateState = {
+      portrait: {
+        day: { start: '2025-01-01', end: '2026-12-31' },
+        month: { start: '2025-01', end: '2026-12' }
+      },
+      entry: {
+        day: { start: '2025-01-01', end: '2026-12-31' },
+        month: { start: '2025-01', end: '2026-12' }
+      }
+    };
+
+    const cityMonthlyRangeDate = buildDate(2026, 2, 1);
+
     const cityMonthlyTemplates = [
       ['198.45','30.00','168.45','38.72','8.56','11.20','6.45','9.30','1.05','58.48','256.93','32.18','6.60','25.58','10.20','1.83','44.21','18.0%','86.30','5420','1102','4318','1278','215','820','7733','1305','883','215','668','276','58','1885','723'],
       ['112.34','16.00','96.34','22.15','4.82','6.30','3.24','4.92','0.63','33.27','145.61','21.45','4.20','17.25','6.10','1.38','28.93','20.8%','52.40','3320','688','2632','906','143','533','4902','902','642','151','491','197','33','1330','412'],
@@ -1705,21 +1733,79 @@
       return `${date.getFullYear()}-${pad2(date.getMonth() + 1)}`;
     }
 
+    function getActiveTabName() {
+      return document.querySelector('.tab.active')?.dataset.tab || 'portrait';
+    }
+
+    function getActiveDateGranularity(tabName = getActiveTabName()) {
+      if (tabName === 'city') {
+        return document.querySelector('.city-report-switch button.active')?.dataset.cityView === 'monthly' ? 'month' : 'day';
+      }
+      return dateGranularityState[tabName] || 'day';
+    }
+
+    function syncDateGranularityButtons(granularity) {
+      dateGranularityBtns.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.dateGranularity === granularity);
+      });
+    }
+
+    function setDateInputFormat(granularity) {
+      const placeholder = granularity === 'month' ? '支持输入：YYYY-MM' : '支持输入：YYYY-MM-DD';
+      if (startTimeInput) startTimeInput.placeholder = placeholder;
+      if (endTimeInput) endTimeInput.placeholder = placeholder;
+    }
+
+    function normalizeInputValueByGranularity(value, granularity, fallbackDate) {
+      const date = parseAnyDate(value) || fallbackDate;
+      if (!date) return '';
+      return granularity === 'month' ? toMonthText(date) : toDayText(date);
+    }
+
+    function isDateInRange(dateText, startText, endText, granularity) {
+      if (granularity === 'month') {
+        const rowKey = toRowMonthKey(dateText);
+        if (!rowKey) return true;
+        const startKey = toMonthKey(startText);
+        const endKey = toMonthKey(endText);
+        if (startKey && rowKey < startKey) return false;
+        if (endKey && rowKey > endKey) return false;
+        return true;
+      }
+
+      const rowDate = parseAnyDate(dateText);
+      if (!rowDate) return true;
+      const startDate = parseAnyDate(startText);
+      const endDate = parseAnyDate(endText);
+      if (startDate && rowDate.getTime() < startDate.getTime()) return false;
+      if (endDate && rowDate.getTime() > endDate.getTime()) return false;
+      return true;
+    }
+
     function setDateInputsByTab(tabName) {
       if (!startTimeInput || !endTimeInput) return;
-      const start = parseAnyDate(startTimeInput.value) || buildDate(2025, 1, 1);
-      const end = parseAnyDate(endTimeInput.value) || buildDate(2026, 12, 31);
-      startTimeInput.placeholder = '支持输入：YYYY-MM-DD';
-      endTimeInput.placeholder = '支持输入：YYYY-MM-DD';
+      const granularity = getActiveDateGranularity(tabName);
+      syncDateGranularityButtons(granularity);
+      setDateInputFormat(granularity);
       if (tabName === 'city') {
         const activeCityView = document.querySelector('.city-report-switch button.active')?.dataset.cityView || 'weekly';
         const range = cityDateRanges[activeCityView] || cityDateRanges.weekly;
-        startTimeInput.value = range.start || toDayText(start);
-        endTimeInput.value = range.end || toDayText(end);
-      } else {
-        startTimeInput.value = toDayText(start);
-        endTimeInput.value = toDayText(end);
+        startTimeInput.value = range.start;
+        endTimeInput.value = range.end;
+        return;
       }
+
+      const tabState = tabDateState[tabName]?.[granularity];
+      if (tabState) {
+        startTimeInput.value = tabState.start;
+        endTimeInput.value = tabState.end;
+        return;
+      }
+
+      const startFallback = buildDate(2025, 1, 1);
+      const endFallback = buildDate(2026, 12, 31);
+      startTimeInput.value = normalizeInputValueByGranularity(startTimeInput.value, granularity, startFallback);
+      endTimeInput.value = normalizeInputValueByGranularity(endTimeInput.value, granularity, endFallback);
     }
 
     function renderRows(tbody, rows) {
@@ -1733,22 +1819,20 @@
     }
 
     function filterPortraitRows() {
-      const startDate = parseAnyDate(startTimeInput?.value || '');
-      const endDate = parseAnyDate(endTimeInput?.value || '');
       const nations = new Set(getEffectiveNationValues());
       const channel = channelSelect?.value || '全部';
       const guochao = guochaoSelect?.value || '全部';
       const businessType = businessTypeSelect?.value || '全部';
-      const normalizeBusinessType = value => (value === '其他' ? '其它' : value);
-      const selectedStores = new Set(getEffectiveStoreValues());
-
-      const isDateMatch = dateText => {
-        const rowDate = parseAnyDate(dateText);
-        if (!rowDate) return true;
-        if (startDate && rowDate.getTime() < startDate.getTime()) return false;
-        if (endDate && rowDate.getTime() > endDate.getTime()) return false;
-        return true;
+      const granularity = getActiveDateGranularity('portrait');
+      const startText = startTimeInput?.value || '';
+      const endText = endTimeInput?.value || '';
+      const normalizeBusinessType = value => {
+        if (value === '其他') return '其它';
+        if (value === '其它（退税）') return '其它（退税）';
+        if (value === '其它' || value === '离境退税' || value === '国产品退税') return '其它（退税）';
+        return value;
       };
+      const selectedStores = new Set(getEffectiveStoreValues());
 
       const isStoreMatch = store => !selectedStores.size || selectedStores.has(store);
       const isChannelMatch = text => channel === '全部' || text.includes(channel);
@@ -1759,7 +1843,7 @@
       });
 
       const detailRows = detailRowSource.portrait.filter(item => {
-        if (!isDateMatch(item.dateText)) return false;
+        if (!isDateInRange(item.dateText, startText, endText, granularity)) return false;
         if (nations.size && !nations.has(item.nation)) return false;
         if (!isStoreMatch(item.store)) return false;
         if (!isChannelMatch(item.channel)) return false;
@@ -1773,17 +1857,16 @@
     }
 
     function filterEntryRows() {
-      const startDate = parseAnyDate(startTimeInput?.value || '');
-      const endDate = parseAnyDate(endTimeInput?.value || '');
       const nations = new Set(getEffectiveNationValues());
       const channel = channelSelect?.value || '全部';
       const guochao = guochaoSelect?.value || '全部';
+      const granularity = getActiveDateGranularity('entry');
+      const startText = startTimeInput?.value || '';
+      const endText = endTimeInput?.value || '';
       const selectedStores = new Set(getEffectiveStoreValues());
 
       const rows = detailRowSource.entry.filter(item => {
-        const rowDate = parseAnyDate(item.dateText);
-        if (rowDate && startDate && rowDate.getTime() < startDate.getTime()) return false;
-        if (rowDate && endDate && rowDate.getTime() > endDate.getTime()) return false;
+        if (!isDateInRange(item.dateText, startText, endText, granularity)) return false;
         if (nations.size && !nations.has(item.nation)) return false;
         if (selectedStores.size && !selectedStores.has(item.store)) return false;
         if (channel !== '全部' && !item.channel.includes(channel)) return false;
@@ -1824,7 +1907,7 @@
     }
 
     function applyCurrentTabFilters() {
-      const activeTab = document.querySelector('.tab.active')?.dataset.tab || 'portrait';
+      const activeTab = getActiveTabName();
       if (activeTab === 'portrait') {
         applyPortraitColumnVisibility();
         filterPortraitRows();
@@ -1835,10 +1918,24 @@
       }
     }
 
+    function rememberCurrentTabDateRange() {
+      const activeTab = getActiveTabName();
+      if (activeTab === 'city') return;
+      const granularity = getActiveDateGranularity(activeTab);
+      if (!tabDateState[activeTab]) return;
+      tabDateState[activeTab][granularity] = {
+        start: startTimeInput?.value || '',
+        end: endTimeInput?.value || ''
+      };
+    }
+
     if (channelSelect) channelSelect.addEventListener('change', applyCurrentTabFilters);
     if (guochaoSelect) guochaoSelect.addEventListener('change', applyCurrentTabFilters);
     if (businessTypeSelect) businessTypeSelect.addEventListener('change', applyCurrentTabFilters);
-    if (queryBtn) queryBtn.addEventListener('click', applyCurrentTabFilters);
+    if (queryBtn) queryBtn.addEventListener('click', () => {
+      rememberCurrentTabDateRange();
+      applyCurrentTabFilters();
+    });
 
     const entryTypeSelect = document.getElementById('entryTypeSelect');
     const entrySummaryBody = document.getElementById('entrySummaryBody');
@@ -1911,21 +2008,25 @@
     const cityViewPanels = document.querySelectorAll('.city-view');
     const cityTitle = document.getElementById('cityTitle');
     const cityDateRanges = {
-      weekly: { start: '2026-03-12', end: '2026-03-18' },
-      monthly: { start: '2026-02-01', end: '2026-02-28' }
+      weekly: { start: '2026-03-12', end: '2026-03-18', granularity: 'day' },
+      monthly: {
+        start: cityMonthlyRangeDate ? toMonthText(cityMonthlyRangeDate) : '2026-02',
+        end: cityMonthlyRangeDate ? toMonthText(cityMonthlyRangeDate) : '2026-02',
+        granularity: 'month'
+      }
     };
 
     function setCityView(view) {
       citySwitchBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.cityView === view));
       cityViewPanels.forEach(panel => panel.classList.toggle('active', panel.dataset.cityViewPanel === view));
       if (cityTitle) {
-        cityTitle.textContent = view === 'monthly'
-          ? '市内店销售额统计（2026年2月）（金额：万元）'
-          : '市内店销售额统计（本周3.12-3.18）（金额：万元）';
+        cityTitle.textContent = '';
       }
 
-      if (document.querySelector('.tab.active')?.dataset.tab === 'city') {
+      if (getActiveTabName() === 'city') {
         const range = cityDateRanges[view] || cityDateRanges.weekly;
+        syncDateGranularityButtons(range.granularity || 'day');
+        setDateInputFormat(range.granularity || 'day');
         if (startTimeInput) startTimeInput.value = range.start;
         if (endTimeInput) endTimeInput.value = range.end;
       }
@@ -1950,13 +2051,14 @@
       applyCurrentTabFilters();
     }
 
-    const columnState = { channel: true, nation: true, domesticTaxRefund: false, departureTaxRefund: false };
+    const columnState = {
+      channel: true,
+      nation: true,
+      domesticTaxRefund: false,
+      departureTaxRefund: false
+    };
 
-    function applyColumnVisibility() {
-      applyPortraitColumnVisibility();
-    }
-
-    document.querySelectorAll('.toggle-control').forEach(control => {
+    document.querySelectorAll('.toggle-control[data-target-col]').forEach(control => {
       const col = control.dataset.targetCol;
       const buttons = control.querySelectorAll('.toggle-btn');
       buttons.forEach(btn => {
@@ -1964,8 +2066,20 @@
           buttons.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           columnState[col] = btn.dataset.value === 'yes';
-          applyColumnVisibility();
+          applyPortraitColumnVisibility();
         });
+      });
+    });
+
+    dateGranularityBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const activeTab = getActiveTabName();
+        if (activeTab === 'city') return;
+        rememberCurrentTabDateRange();
+        const granularity = btn.dataset.dateGranularity;
+        dateGranularityState[activeTab] = granularity;
+        setDateInputsByTab(activeTab);
+        applyCurrentTabFilters();
       });
     });
 
@@ -2019,7 +2133,7 @@
     initStoreMultiSelect();
     setDateInputsByTab('portrait');
     setCityView('weekly');
-    applyColumnVisibility();
+    applyPortraitColumnVisibility();
     openByQuery();
   </script>
 </body>
