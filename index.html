@@ -1508,7 +1508,7 @@
     ];
 
     const dateGranularityState = {
-      portrait: 'day',
+      portrait: 'month',
       entry: 'day'
     };
 
@@ -1905,6 +1905,7 @@
       const foreignMode = foreignSelect?.value || '全部';
       const showStoreCols = foreignMode !== '是';
       const showForeignCols = foreignMode !== '否';
+      const visibleMetricColspan = 6 - (columnState.domesticTaxRefund ? 0 : 1) - (columnState.departureTaxRefund ? 0 : 1);
 
       document.querySelectorAll('#fig1 .col-channel').forEach(el => {
         el.classList.toggle('hidden-col', !columnState.channel);
@@ -1923,6 +1924,15 @@
         if (el.classList.contains('col-departure-tax-refund')) visible = visible && columnState.departureTaxRefund;
 
         el.classList.toggle('hidden-col', !visible);
+      });
+
+      document.querySelectorAll('#fig1 thead tr:first-child th.col-store').forEach(el => {
+        el.colSpan = visibleMetricColspan;
+        el.classList.toggle('hidden-col', !showStoreCols);
+      });
+      document.querySelectorAll('#fig1 thead tr:first-child th.col-foreign').forEach(el => {
+        el.colSpan = visibleMetricColspan;
+        el.classList.toggle('hidden-col', !showForeignCols);
       });
     }
 
