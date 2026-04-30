@@ -662,6 +662,7 @@
     }
 
     .hidden-col { display: none; }
+    .granularity-hidden { display: none; }
 
     @media (max-width: 1200px) {
       .filter-grid { grid-template-columns: repeat(3, minmax(150px, 1fr)); }
@@ -1275,6 +1276,14 @@
     const dateGranularityBtns = document.querySelectorAll('[data-date-granularity]');
     const portraitSummaryBody = document.querySelector('#fig1 tbody');
     const portraitDetailBody = document.getElementById('portraitDetailBody');
+    const portraitSummarySectionTitle = document.querySelector('#fig1 .section-title');
+    const portraitDetailSectionTitle = document.querySelector('#fig2 .section-title');
+    const portraitSummaryHeaderCells = document.querySelectorAll('#fig1 thead tr:first-child th.col-store, #fig1 thead tr:first-child th.col-foreign');
+    const portraitDetailDateHeader = document.querySelector('#fig2 thead tr th:nth-child(2)');
+    const entrySummarySectionTitle = document.querySelector('#entry #fig3 .section-title');
+    const entrySectionTitles = document.querySelectorAll('#entry .section .section-title');
+    const entryDetailSectionTitle = entrySectionTitles[1] || null;
+    const entryDetailDateHeader = document.querySelector('#entryDetailBody')?.closest('table')?.querySelector('thead tr th:nth-child(2)');
     const entryDetailBody = document.getElementById('entryDetailBody');
     const cityWeeklyBody = document.getElementById('cityWeeklyBody');
     const cityMonthlyBody = document.getElementById('cityMonthlyBody');
@@ -1445,6 +1454,11 @@
       });
     }
 
+    function parseNumberText(value) {
+      const numeric = Number(String(value || '0').replace(/,/g, '').trim());
+      return Number.isFinite(numeric) ? numeric : 0;
+    }
+
     const detailRowSource = {
       portrait: portraitDetailBody
         ? Array.from(portraitDetailBody.querySelectorAll('tr')).map(tr => ({
@@ -1454,7 +1468,10 @@
             store: tr.children[3]?.textContent.trim() || '',
             channel: tr.children[4]?.textContent.trim() || '',
             guochao: tr.children[7]?.textContent.trim() || '',
-            businessType: tr.children[8]?.textContent.trim() || ''
+            businessType: tr.children[8]?.textContent.trim() || '',
+            salesAmount: parseNumberText(tr.children[11]?.textContent),
+            domesticTaxRefundAmount: parseNumberText(tr.children[12]?.textContent),
+            departureTaxRefundAmount: parseNumberText(tr.children[13]?.textContent)
           }))
         : [],
       entry: entryDetailBody
@@ -1464,7 +1481,8 @@
             nation: tr.children[2]?.textContent.trim() || '',
             store: tr.children[3]?.textContent.trim() || '',
             channel: tr.children[4]?.textContent.trim() || '',
-            guochaoAmount: tr.children[6]?.textContent.trim() || '0'
+            salesAmount: parseNumberText(tr.children[5]?.textContent),
+            guochaoAmount: parseNumberText(tr.children[6]?.textContent)
           }))
         : []
     };
@@ -1477,6 +1495,116 @@
           nation: tr.children[2]?.textContent.trim() || ''
         }))
       : [];
+
+    function formatMetric(value, digits = 2) {
+      return Number(value || 0).toFixed(digits);
+    }
+
+    function classifyNationGroup(nation) {
+      return nation !== '中国大陆' ? 'foreign' : 'store';
+    }
+
+    function buildPortraitSummaryRows(detailRows, granularity) {
+      const buildMetrics = () => ({ sales: 0, domestic: 0, departure: 0, guochaoSales: 0, shoppers: 0, guochaoShoppers: 0 });
+      const addMetrics = (target, item) => {
+        target.sales += item.salesAmount;
+        target.domestic += item.domesticTaxRefundAmount;
+        target.departure += item.departureTaxRefundAmount;
+        if (item.guochao === '是') {
+          target.guochaoSales += item.salesAmount;
+          target.guochaoShoppers += 1;
+        }
+        target.shoppers += 1;
+      };
+
+      const rowGroups = new Map();
+      const storeChannelTotals = new Map();
+      const foreignTotals = new Map();
+
+      detailRows.forEach(item => {
+        const rowKey = [item.store, item.channel, item.nation].join('||');
+        const storeChannelKey = [item.store, item.channel].join('||');
+
+        if (!rowGroups.has(rowKey)) {
+          rowGroups.set(rowKey, {
+            rowKey,
+            storeChannelKey,
+            store: item.store,
+            channel: item.channel,
+            nation: item.nation
+          });
+        }
+        if (!storeChannelTotals.has(storeChannelKey)) {
+          storeChannelTotals.set(storeChannelKey, buildMetrics());
+        }
+        addMetrics(storeChannelTotals.get(storeChannelKey), item);
+
+        if (classifyNationGroup(item.nation) === 'foreign') {
+          if (!foreignTotals.has(storeChannelKey)) {
+            foreignTotals.set(storeChannelKey, buildMetrics());
+          }
+          addMetrics(foreignTotals.get(storeChannelKey), item);
+        }
+      });
+
+      const sourceOrder = new Map(summaryRowSource.map((item, index) => [[item.store, item.channel, item.nation].join('||'), index]));
+      const sortedRows = Array.from(rowGroups.values()).sort((a, b) => {
+        const orderA = sourceOrder.get(a.rowKey);
+        const orderB = sourceOrder.get(b.rowKey);
+        if (orderA !== undefined && orderB !== undefined) return orderA - orderB;
+        if (orderA !== undefined) return -1;
+        if (orderB !== undefined) return 1;
+        return a.rowKey.localeCompare(b.rowKey, 'zh-CN');
+      });
+
+      return sortedRows.map(item => {
+        const monthlyStore = storeChannelTotals.get(item.storeChannelKey) || buildMetrics();
+        const monthlyForeign = foreignTotals.get(item.storeChannelKey) || buildMetrics();
+        const yearlyStore = { ...monthlyStore };
+        const yearlyForeign = { ...monthlyForeign };
+
+        return {
+          html: `<tr>
+                  <td>${item.store}</td>
+                  <td class="col-channel"><span class="tag tag-online">${item.channel}</span></td>
+                  <td class="col-nation">${item.nation}</td>
+                  <td class="col-store">${formatMetric(yearlyStore.sales)}</td><td class="col-store col-domestic-tax-refund">${formatMetric(yearlyStore.domestic)}</td><td class="col-store col-departure-tax-refund">${formatMetric(yearlyStore.departure)}</td><td class="col-store">${formatMetric(yearlyStore.guochaoSales)}</td><td class="col-store">${formatMetric(yearlyStore.shoppers, 0)}</td><td class="col-store">${formatMetric(yearlyStore.guochaoShoppers, 0)}</td>
+                  <td class="col-store">${formatMetric(monthlyStore.sales)}</td><td class="col-store col-domestic-tax-refund">${formatMetric(monthlyStore.domestic)}</td><td class="col-store col-departure-tax-refund">${formatMetric(monthlyStore.departure)}</td><td class="col-store">${formatMetric(monthlyStore.guochaoSales)}</td><td class="col-store">${formatMetric(monthlyStore.shoppers, 0)}</td><td class="col-store">${formatMetric(monthlyStore.guochaoShoppers, 0)}</td>
+                  <td class="col-foreign">${formatMetric(yearlyForeign.sales)}</td><td class="col-foreign col-domestic-tax-refund">${formatMetric(yearlyForeign.domestic)}</td><td class="col-foreign col-departure-tax-refund">${formatMetric(yearlyForeign.departure)}</td><td class="col-foreign">${formatMetric(yearlyForeign.guochaoSales)}</td><td class="col-foreign">${formatMetric(yearlyForeign.shoppers, 0)}</td><td class="col-foreign">${formatMetric(yearlyForeign.guochaoShoppers, 0)}</td>
+                  <td class="col-foreign">${formatMetric(monthlyForeign.sales)}</td><td class="col-foreign col-domestic-tax-refund">${formatMetric(monthlyForeign.domestic)}</td><td class="col-foreign col-departure-tax-refund">${formatMetric(monthlyForeign.departure)}</td><td class="col-foreign">${formatMetric(monthlyForeign.guochaoSales)}</td><td class="col-foreign">${formatMetric(monthlyForeign.shoppers, 0)}</td><td class="col-foreign">${formatMetric(monthlyForeign.guochaoShoppers, 0)}</td>
+                </tr>`
+        };
+      });
+    }
+
+    function buildEntrySummaryRows(detailRows) {
+      const grouped = new Map();
+
+      detailRows.forEach(item => {
+        const nation = item.nation || '未知';
+        if (!grouped.has(nation)) {
+          grouped.set(nation, { nation, stores: {}, total: 0 });
+        }
+        const target = grouped.get(nation);
+        target.stores[item.store] = (target.stores[item.store] || 0) + item.salesAmount;
+        target.total += item.salesAmount;
+      });
+
+      const orderedRows = Array.from(grouped.values()).sort((a, b) => b.total - a.total);
+      const totalRow = { nation: '合计', stores: {}, total: 0 };
+      orderedRows.forEach(row => {
+        entryStoreOptions.forEach(store => {
+          const value = row.stores[store.value] || 0;
+          totalRow.stores[store.value] = (totalRow.stores[store.value] || 0) + value;
+          totalRow.total += value;
+        });
+      });
+
+      const result = totalRow.total > 0 ? [totalRow, ...orderedRows] : orderedRows;
+      return result.map(row => ({
+        html: `<tr><td>${row.nation}</td>${entryStoreOptions.map(store => `<td>${formatMetric(row.stores[store.value] || 0)}</td>`).join('')}<td>${formatMetric(row.total)}</td></tr>`
+      }));
+    }
 
     const defaultStoreOptions = storeSelect
       ? Array.from(storeSelect.options).map(opt => ({ value: opt.value, text: opt.textContent }))
@@ -1838,6 +1966,22 @@
       tbody.innerHTML = rows.map(item => item.html).join('');
     }
 
+    function normalizeDisplayDateText(dateText, granularity) {
+      const parsed = parseAnyDate(dateText);
+      if (!parsed) return dateText;
+      return granularity === 'month' ? toMonthText(parsed) : toDayText(parsed);
+    }
+
+    function replaceRowDateCell(html, cellIndex, nextText) {
+      const wrap = document.createElement('tbody');
+      wrap.innerHTML = html.trim();
+      const row = wrap.querySelector('tr');
+      const cell = row?.children?.[cellIndex];
+      if (!row || !cell) return html;
+      cell.textContent = nextText;
+      return row.outerHTML;
+    }
+
     function filterPortraitRows() {
       const nations = new Set(getEffectiveNationValues());
       const channel = channelSelect?.value || '全部';
@@ -1857,12 +2001,7 @@
       const isStoreMatch = store => !selectedStores.size || selectedStores.has(store);
       const isChannelMatch = text => channel === '全部' || text.includes(channel);
 
-      const summaryRows = summaryRowSource.filter(item => {
-        if (nations.size && !nations.has(item.nation)) return false;
-        return isStoreMatch(item.store) && isChannelMatch(item.channel);
-      });
-
-      const detailRows = detailRowSource.portrait.filter(item => {
+      const filteredSourceRows = detailRowSource.portrait.filter(item => {
         if (!isDateInRange(item.dateText, startText, endText, granularity)) return false;
         if (nations.size && !nations.has(item.nation)) return false;
         if (!isStoreMatch(item.store)) return false;
@@ -1872,11 +2011,18 @@
         return true;
       });
 
+      const summaryRows = buildPortraitSummaryRows(filteredSourceRows, granularity);
+      const detailRows = filteredSourceRows.map(item => ({
+        ...item,
+        html: replaceRowDateCell(item.html, 1, normalizeDisplayDateText(item.dateText, granularity))
+      }));
+
       renderRows(portraitSummaryBody, summaryRows);
       renderRows(portraitDetailBody, detailRows);
+      applyPortraitColumnVisibility();
     }
 
-    function filterEntryRows() {
+    function getFilteredEntryRows() {
       const nations = new Set(getEffectiveNationValues());
       const channel = channelSelect?.value || '全部';
       const guochao = guochaoSelect?.value || '全部';
@@ -1884,21 +2030,69 @@
       const startText = startTimeInput?.value || '';
       const endText = endTimeInput?.value || '';
       const selectedStores = new Set(getEffectiveStoreValues());
+      const entryTypeNations = getEntryTypeNations(entryTypeSelect?.value || 'all');
 
-      const rows = detailRowSource.entry.filter(item => {
+      return detailRowSource.entry.filter(item => {
         if (!isDateInRange(item.dateText, startText, endText, granularity)) return false;
         if (nations.size && !nations.has(item.nation)) return false;
+        if (entryTypeNations && !entryTypeNations.has(item.nation)) return false;
         if (selectedStores.size && !selectedStores.has(item.store)) return false;
         if (channel !== '全部' && !item.channel.includes(channel)) return false;
         if (guochao !== '全部') {
-          const amount = Number(item.guochaoAmount || '0');
-          const isGuochao = amount > 0;
+          const isGuochao = item.guochaoAmount > 0;
           if ((guochao === '是' && !isGuochao) || (guochao === '否' && isGuochao)) return false;
         }
         return true;
       });
+    }
+
+    function filterEntryRows() {
+      const granularity = getActiveDateGranularity('entry');
+      const rows = getFilteredEntryRows().map(item => ({
+        ...item,
+        html: replaceRowDateCell(item.html, 1, normalizeDisplayDateText(item.dateText, granularity))
+      }));
 
       renderRows(entryDetailBody, rows);
+      return rows;
+    }
+
+    function applyPortraitGranularityPresentation(granularity) {
+      const isMonth = granularity === 'month';
+      if (portraitSummarySectionTitle) {
+        portraitSummarySectionTitle.textContent = isMonth ? '汇总表（月）' : '汇总表（日）';
+      }
+      if (portraitDetailSectionTitle) {
+        portraitDetailSectionTitle.textContent = isMonth ? '明细表（月）' : '明细表（日）';
+      }
+      if (portraitDetailDateHeader) {
+        portraitDetailDateHeader.textContent = isMonth ? '年月' : '日期';
+      }
+      portraitSummaryHeaderCells.forEach((el, index) => {
+        const isStore = el.classList.contains('col-store');
+        if (isStore) {
+          el.textContent = isMonth
+            ? (index === 0 ? '门店总体销售情况年累计' : '门店总体销售情况月累计')
+            : (index === 0 ? '门店总体销售情况日累计' : '门店总体销售情况日汇总');
+        } else {
+          el.textContent = isMonth
+            ? (index === 2 ? '外籍人员消费情况年累计' : '外籍人员消费情况月累计')
+            : (index === 2 ? '外籍人员消费情况日累计' : '外籍人员消费情况日汇总');
+        }
+      });
+    }
+
+    function applyEntryGranularityPresentation(granularity) {
+      const isMonth = granularity === 'month';
+      if (entrySummarySectionTitle) {
+        entrySummarySectionTitle.textContent = isMonth ? '汇总表（月）' : '汇总表（日）';
+      }
+      if (entryDetailSectionTitle) {
+        entryDetailSectionTitle.textContent = isMonth ? '明细表（月）' : '明细表（日）';
+      }
+      if (entryDetailDateHeader) {
+        entryDetailDateHeader.textContent = isMonth ? '年月' : '日期';
+      }
     }
 
     function applyPortraitColumnVisibility() {
@@ -1936,13 +2130,20 @@
       });
     }
 
+    function renderEntryTab() {
+      applyEntryGranularityPresentation(getActiveDateGranularity('entry'));
+      const detailRows = filterEntryRows();
+      renderEntrySummary(detailRows);
+    }
+
     function applyCurrentTabFilters() {
       const activeTab = getActiveTabName();
       if (activeTab === 'portrait') {
         applyPortraitColumnVisibility();
+        applyPortraitGranularityPresentation(getActiveDateGranularity('portrait'));
         filterPortraitRows();
       } else if (activeTab === 'entry') {
-        filterEntryRows();
+        renderEntryTab();
       } else {
         renderCityTables(getEffectiveStoreValues());
       }
@@ -1970,68 +2171,21 @@
     const entryTypeSelect = document.getElementById('entryTypeSelect');
     const entrySummaryBody = document.getElementById('entrySummaryBody');
 
-    const entryColumnIndexes = [0, 6, 1, 8, 5, 17, 7, 10, 11, 9, 19, 14, 15, 20];
-
-    const entryMatrix = {
-      outbound: {
-        '合计': [62.8,58.6,74.3,43.2,55.8,60.2,34.4,39.3,31.6,28.7,26.5,24.8,22.9,19.7,21.2,18.4,37.5,33.6,48.2,16.9,14.2],
-        '香港': [12.6,8.2,15.4,7.8,9.7,10.8,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-        '澳门': [8.3,7.1,9.8,6.1,8.5,11.4,5.7,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-        '日本': [5.2,4.8,6.4,3.7,4.3,5.1,2.8,3.3,2.9,2.7,2.3,1.9,1.8,1.5,1.4,1.2,2.4,2.1,3.0,1.1,0.9],
-        '美国': [7.8,6.9,8.6,5.4,6.1,6.8,4.2,5.0,4.4,3.8,3.4,3.2,2.9,2.6,2.4,2.0,3.1,2.8,4.2,1.6,1.3]
-      },
-      inbound: {
-        '合计': [71.4,66.8,83.9,49.5,63.2,68.4,39.1,45.7,36.8,33.1,29.4,27.7,25.8,22.1,24.6,20.7,41.6,38.2,53.5,19.6,16.1],
-        '中国大陆': [16.2,14.8,19.5,9.4,11.8,12.6,6.4,7.1,5.8,4.9,4.2,3.8,3.4,3.1,3.0,2.5,4.7,4.2,6.3,2.2,1.8],
-        '台湾': [7.3,6.2,8.4,4.1,5.2,5.6,3.3,3.9,3.1,2.8,2.3,2.1,1.9,1.6,1.7,1.3,2.4,2.1,3.2,1.1,0.9],
-        '韩国': [6.6,5.8,7.3,4.2,5.1,5.7,3.5,4.1,3.3,3.0,2.4,2.2,2.0,1.7,1.8,1.4,2.6,2.3,3.4,1.2,1.0],
-        '新加坡': [4.9,4.1,5.6,3.2,4.0,4.3,2.5,2.9,2.3,2.0,1.7,1.5,1.4,1.1,1.2,1.0,1.8,1.6,2.4,0.9,0.7]
-      },
-      other: {
-        '合计': [8.6,7.5,9.6,5.3,6.8,7.2,4.7,5.4,4.0,3.7,2.9,2.8,2.3,2.1,1.9,1.5,3.0,2.6,3.7,1.1,0.8],
-        '香港': [1.4,1.1,1.8,0.9,1.2,1.3,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-        '澳门': [0.9,0.8,1.2,0.6,0.7,0.9,0.5,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0],
-        '法国': [1.1,1.0,1.3,0.7,0.9,0.8,0.6,0.9,0.5,0.4,0.4,0.4,0.3,0.3,0.2,0.2,0.5,0.4,0.6,0.2,0.1],
-        '德国': [0.8,0.7,0.9,0.5,0.6,0.7,0.4,0.5,0.4,0.3,0.3,0.2,0.2,0.2,0.2,0.1,0.3,0.3,0.4,0.1,0.1]
-      }
-    };
-
-    function buildAllMatrix() {
-      const source = [entryMatrix.outbound, entryMatrix.inbound, entryMatrix.other];
-      const merged = {};
-      source.forEach(group => {
-        Object.entries(group).forEach(([nation, values]) => {
-          if (!merged[nation]) merged[nation] = Array(values.length).fill(0);
-          values.forEach((v, i) => merged[nation][i] += v);
-        });
-      });
-      return merged;
+    function getEntryTypeNations(type) {
+      if (type === 'outbound') return new Set(['香港', '澳门', '日本', '美国']);
+      if (type === 'inbound') return new Set(['中国大陆', '台湾', '韩国', '新加坡']);
+      if (type === 'other') return new Set(['法国', '德国', '英国', '加拿大', '澳大利亚', '阿联酋', '泰国', '马来西亚', '印度', '巴西', '南非']);
+      return null;
     }
 
-    entryMatrix.all = buildAllMatrix();
-
-    function renderEntrySummary(type) {
-      const matrix = entryMatrix[type] || entryMatrix.all;
-      const ordered = Object.keys(matrix).includes('合计')
-        ? ['合计', ...Object.keys(matrix).filter(k => k !== '合计')]
-        : Object.keys(matrix);
-
-      entrySummaryBody.innerHTML = ordered.map(nation => {
-        const values = matrix[nation] || [];
-        const displayValues = entryColumnIndexes.map(index => Number(values[index] || 0));
-        const sum = displayValues.reduce((acc, cur) => acc + cur, 0);
-        const cells = displayValues
-          .map(v => `<td>${v.toFixed(2)}</td>`)
-          .join('');
-        return `<tr><td>${nation}</td>${cells}<td>${sum.toFixed(2)}</td></tr>`;
-      }).join('');
+    function renderEntrySummary(rows) {
+      renderRows(entrySummaryBody, buildEntrySummaryRows(rows));
     }
 
     if (entryTypeSelect) {
-      entryTypeSelect.addEventListener('change', e => {
-        renderEntrySummary(e.target.value);
+      entryTypeSelect.addEventListener('change', () => {
+        applyCurrentTabFilters();
       });
-      renderEntrySummary('all');
     }
 
     const citySwitchBtns = document.querySelectorAll('.city-report-switch button');
