@@ -2060,10 +2060,10 @@
     function applyPortraitGranularityPresentation(granularity) {
       const isMonth = granularity === 'month';
       if (portraitSummarySectionTitle) {
-        portraitSummarySectionTitle.textContent = isMonth ? '汇总表（月）' : '汇总表（日）';
+        portraitSummarySectionTitle.textContent = '汇总表';
       }
       if (portraitDetailSectionTitle) {
-        portraitDetailSectionTitle.textContent = isMonth ? '明细表（月）' : '明细表（日）';
+        portraitDetailSectionTitle.textContent = '明细表';
       }
       if (portraitDetailDateHeader) {
         portraitDetailDateHeader.textContent = isMonth ? '年月' : '日期';
@@ -2085,10 +2085,10 @@
     function applyEntryGranularityPresentation(granularity) {
       const isMonth = granularity === 'month';
       if (entrySummarySectionTitle) {
-        entrySummarySectionTitle.textContent = isMonth ? '汇总表（月）' : '汇总表（日）';
+        entrySummarySectionTitle.textContent = '汇总表';
       }
       if (entryDetailSectionTitle) {
-        entryDetailSectionTitle.textContent = isMonth ? '明细表（月）' : '明细表（日）';
+        entryDetailSectionTitle.textContent = '明细表';
       }
       if (entryDetailDateHeader) {
         entryDetailDateHeader.textContent = isMonth ? '年月' : '日期';
